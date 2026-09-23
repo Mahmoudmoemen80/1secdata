@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin - متابعة تسجيل الطلاب</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="hero"><div><h1>لوحة متابعة تسجيل الطلاب</h1><p>المسجلون وغير المسجلين</p></div><a class="admin-link" href="index.html">صفحة الطلاب</a></header>
+<main class="container">
+<section id="loginCard" class="card">
+<h2>دخول Admin</h2>
+<form id="loginForm"><label>البريد الإلكتروني</label><input id="email" type="email" required>
+<label>كلمة المرور</label><input id="password" type="password" required><button>دخول</button></form>
+<div id="loginMsg"></div>
+</section>
+<section id="dashboard" class="hidden">
+<div class="stats">
+<div class="stat"><b id="total">0</b><span>إجمالي الطلاب</span></div>
+<div class="stat"><b id="registered">0</b><span>المسجلون</span></div>
+<div class="stat"><b id="unregistered">0</b><span>غير المسجلين</span></div>
+</div>
+<section class="card">
+<div class="toolbar"><input id="search" placeholder="بحث بالاسم أو الكود أو الرقم القومي...">
+<select id="status"><option value="all">الكل</option><option value="registered">مسجل</option><option value="unregistered">غير مسجل</option></select>
+<select id="classFilter"><option value="all">كل الفصول</option></select>
+<button id="exportBtn">تصدير Excel</button><button id="logoutBtn" class="secondary">خروج</button></div>
+<div class="table-wrap"><table><thead><tr><th>#</th><th>الاسم</th><th>الكود</th><th>الفصل</th><th>الرقم القومي</th><th>هاتف الطالب</th><th>هاتف الأب</th><th>العنوان</th><th>الحالة</th></tr></thead><tbody id="rows"></tbody></table></div>
+</section>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script><script src="admin.js"></script>
+</body></html>

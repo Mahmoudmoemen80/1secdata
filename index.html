@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تسجيل بيانات الطلاب</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hero"><div><h1>تسجيل بيانات الطلاب</h1><p>أدخل الرقم القومي للاستعلام عن بياناتك</p></div><a class="admin-link" href="admin.html">Admin</a></header>
+<main class="container">
+<section class="card">
+<h2>الاستعلام عن الطالب</h2>
+<form id="searchForm">
+<label>الرقم القومي</label>
+<input id="nationalId" inputmode="numeric" maxlength="14" autocomplete="off" required>
+<button>بحث</button>
+</form>
+<div id="message"></div>
+</section>
+<section id="studentCard" class="card hidden">
+<h2>بيانات الطالب</h2>
+<div class="grid">
+<div><span>الاسم</span><strong id="sName"></strong></div>
+<div><span>كود الطالب</span><strong id="sCode"></strong></div>
+<div><span>الفصل</span><strong id="sClass"></strong></div>
+<div><span>رقم الملف بالمدرسة</span><strong id="sFile"></strong></div>
+<div><span>الرقم القومي</span><strong id="sNational"></strong></div>
+</div>
+<hr>
+<h2>استكمال البيانات</h2>
+<form id="registerForm">
+<label>رقم تليفون الطالب – واتساب</label>
+<input id="studentPhone" type="tel" inputmode="tel" required>
+<label>رقم تليفون الأب – واتساب</label>
+<input id="fatherPhone" type="tel" inputmode="tel" required>
+<label>العنوان</label>
+<textarea id="address" rows="3" required></textarea>
+<button id="saveBtn">تسجيل البيانات</button>
+</form>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script><script src="app.js"></script>
+</body></html>
