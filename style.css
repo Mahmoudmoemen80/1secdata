@@ -6,18 +6,18 @@
 --primary: #3f7185;
 --primary-dark: #315c6d;
 --secondary: #6b9b91;
---success: #15803d;
---danger: #dc2626;
---warning: #d97706;
+--success: #2f855a;
+--danger: #c94b4b;
+--warning: #c47a24;
 
---bg: #f3f7f8;
+--bg: #f4f8f7;
 --card: #ffffff;
---text: #263746;
---muted: #64748b;
---border: #dce7ea;
+--text: #26383d;
+--muted: #6b7c80;
+--border: #dce8e5;
 
---radius: 16px;
---shadow: 0 8px 25px rgba(38, 55, 70, 0.07);
+--radius: 18px;
+--shadow: 0 10px 30px rgba(44, 73, 78, 0.08);
 }
 
 html {
@@ -36,8 +36,8 @@ sans-serif;
 background:
 linear-gradient(
 180deg,
-#edf5f6 0,
-var(--bg) 280px
+#eef7f5 0,
+var(--bg) 300px
 );
 
 color: var(--text);
@@ -51,67 +51,76 @@ Header
 .hero {
 position: relative;
 
-padding: 32px 20px;
+padding: 34px 20px;
 
 color: #ffffff;
+
+text-align: center;
 
 background:
 linear-gradient(
 135deg,
 #527f91 0%,
-#638f9d 48%,
+#638f99 48%,
 #719f96 100%
 );
 
 box-shadow:
-0 7px 22px rgba(63, 113, 133, 0.16);
+0 8px 25px rgba(63, 113, 133, 0.16);
 
 overflow: hidden;
-
-text-align: center;
 }
 
-/* لمسة مدرسية خفيفة في خلفية الهيدر */
+/* الأيقونات الكبيرة */
+
 .hero::before {
 content: "🏫   📚   🎓   ✏️";
 
 position: absolute;
 
-left: 3%;
-bottom: -18px;
+top: 8px;
+right: 2%;
 
-font-size: 70px;
+font-size: 76px;
 
-letter-spacing: 12px;
-
-white-space: nowrap;
-
-opacity: 0.075;
-
-transform: rotate(-3deg);
-
-pointer-events: none;
-}
-
-.hero::after {
-content: "📖   🏫";
-
-position: absolute;
-
-right: 5%;
-top: -28px;
-
-font-size: 90px;
+line-height: 1;
 
 letter-spacing: 18px;
 
 white-space: nowrap;
 
-opacity: 0.055;
+opacity: 0.13;
 
-transform: rotate(4deg);
+transform: rotate(-4deg);
 
 pointer-events: none;
+
+user-select: none;
+}
+
+.hero::after {
+content: "📖   🏫   📚";
+
+position: absolute;
+
+bottom: -25px;
+left: 3%;
+
+font-size: 82px;
+
+line-height: 1;
+
+letter-spacing: 22px;
+
+white-space: nowrap;
+
+opacity: 0.10;
+
+transform: rotate(3deg);
+
+pointer-events: none;
+
+user-select: none;
 }
 
 .hero > div {
@@ -124,36 +133,31 @@ width: min(1100px, 100%);
 margin: auto;
 }
 
-/* اسم الإدارة والمدرسة والعنوان بنفس الشكل */
 .school-name,
 .hero h1 {
-margin: 0 0 4px;
+margin: 0;
 
 font-size: clamp(21px, 3vw, 27px);
 
-line-height: 1.5;
+line-height: 1.4;
 
 font-weight: 700;
+}
 
-color: #ffffff;
-
-text-shadow:
-0 2px 7px rgba(0, 0, 0, 0.10);
+.school-name {
+margin-bottom: 2px;
 }
 
 .hero h1 {
-margin-bottom: 6px;
+margin-top: 4px;
 }
 
-.hero-subtitle,
-.hero p:not(.school-name) {
-margin: 0;
+.hero-subtitle {
+margin: 7px 0 0;
 
-font-size: 15px;
+font-size: 16px;
 
-font-weight: 500;
-
-opacity: 0.93;
+opacity: 0.95;
 }
 
 /* =========================
@@ -163,7 +167,7 @@ Main
 .container {
 width: min(1100px, calc(100% - 30px));
 
-margin: 28px auto 60px;
+margin: 35px auto 60px;
 }
 
 /* =========================
@@ -173,13 +177,13 @@ Cards
 .card {
 background: var(--card);
 
-border: 1px solid rgba(220, 231, 234, 0.95);
+border: 1px solid rgba(220, 232, 229, 0.95);
 
 border-radius: var(--radius);
 
-padding: 22px;
+padding: 26px;
 
-margin-bottom: 16px;
+margin-bottom: 22px;
 
 box-shadow: var(--shadow);
 }
@@ -187,11 +191,11 @@ box-shadow: var(--shadow);
 .card h2 {
 margin-top: 0;
 
-margin-bottom: 15px;
+margin-bottom: 20px;
 
-font-size: 21px;
+font-size: 22px;
 
-color: #29485a;
+color: #30464c;
 }
 
 /* =========================
@@ -201,11 +205,11 @@ Forms
 label {
 display: block;
 
-margin: 13px 0 6px;
+margin: 15px 0 7px;
 
 font-weight: 700;
 
-color: #334e5c;
+color: #3c555b;
 }
 
 input,
@@ -215,13 +219,11 @@ width: 100%;
 
 max-width: 100%;
 
-min-width: 0;
-
-padding: 11px 13px;
+padding: 13px 15px;
 
 border: 1px solid var(--border);
 
-border-radius: 11px;
+border-radius: 12px;
 
 background: #ffffff;
 
@@ -256,9 +258,9 @@ button,
 .primary-btn {
 border: 0;
 
-border-radius: 11px;
+border-radius: 12px;
 
-padding: 11px 19px;
+padding: 12px 20px;
 
 font-family: inherit;
 
@@ -291,7 +293,7 @@ align-items: center;
 
 justify-content: center;
 
-margin-top: 16px;
+margin-top: 18px;
 
 color: #ffffff;
 
@@ -303,22 +305,22 @@ var(--primary-dark)
 );
 
 box-shadow:
-0 6px 16px rgba(63, 113, 133, 0.20);
+0 7px 18px rgba(63, 113, 133, 0.20);
 }
 
 .primary-btn:hover {
 box-shadow:
-0 9px 20px rgba(63, 113, 133, 0.26);
+0 10px 22px rgba(63, 113, 133, 0.25);
 }
 
 .secondary {
-background: #e6eef0;
+background: #e5eeec;
 
-color: #334e5c;
+color: #3c555b;
 }
 
 .secondary:hover {
-background: #d6e3e7;
+background: #d5e4e0;
 }
 
 /* =========================
@@ -331,33 +333,28 @@ display: grid;
 grid-template-columns:
 repeat(2, minmax(0, 1fr));
 
-/* تقليل المسافة بين خانات بيانات الطالب */
 gap: 8px;
-
-width: 100%;
 }
 
 .grid > div {
-min-width: 0;
-
 padding: 11px 13px;
 
 border: 1px solid var(--border);
 
-border-radius: 11px;
+border-radius: 12px;
 
 background:
 linear-gradient(
 180deg,
 #ffffff,
-#f7fafb
+#f7fbfa
 );
 }
 
 .grid span {
 display: block;
 
-margin-bottom: 2px;
+margin-bottom: 3px;
 
 color: var(--muted);
 
@@ -369,9 +366,7 @@ display: block;
 
 font-size: 16px;
 
-color: #263746;
-
-overflow-wrap: anywhere;
+color: #263b40;
 }
 
 /* =========================
@@ -379,26 +374,26 @@ Continue area
 ========================= */
 
 .continue-area {
-margin-top: 14px;
+margin-top: 18px;
 
-padding: 17px;
+padding: 18px;
 
 text-align: center;
 
-border-radius: 13px;
+border-radius: 15px;
 
 background:
 linear-gradient(
 135deg,
-#f0f7f8,
-#eef8f7
+#eef7f5,
+#f1f7fb
 );
 
-border: 1px solid #d9e9e8;
+border: 1px solid #d9e9e5;
 }
 
 .continue-area p {
-margin: 7px 0 0;
+margin: 8px 0 0;
 
 color: var(--muted);
 
@@ -415,29 +410,29 @@ Messages
 
 #message,
 #loginMsg {
-margin-top: 13px;
+margin-top: 15px;
 
-padding: 11px 14px;
+padding: 12px 15px;
 
-border-radius: 11px;
+border-radius: 12px;
 
 font-weight: 700;
 }
 
 .message.success {
-color: #166534;
+color: #21613f;
 
-background: #dcfce7;
+background: #e3f5ea;
 
-border: 1px solid #bbf7d0;
+border: 1px solid #c5e7d1;
 }
 
 .message.error {
-color: #991b1b;
+color: #8f3434;
 
-background: #fee2e2;
+background: #fbe8e8;
 
-border: 1px solid #fecaca;
+border: 1px solid #f2caca;
 }
 
 /* =========================
@@ -632,9 +627,9 @@ top: 0;
 
 z-index: 2;
 
-color: #334155;
+color: #3c555b;
 
-background: #f8fafc;
+background: #f3f8f7;
 
 font-size: 14px;
 }
@@ -644,7 +639,7 @@ transition: background 0.15s;
 }
 
 tbody tr:hover {
-background: #f8fafc;
+background: #f5faf9;
 }
 
 /* =========================
@@ -668,19 +663,19 @@ font-weight: 800;
 }
 
 .badge.ok {
-color: #166534;
+color: #21613f;
 
-background: #dcfce7;
+background: #e3f5ea;
 
-border: 1px solid #bbf7d0;
+border: 1px solid #c5e7d1;
 }
 
 .badge.no {
-color: #991b1b;
+color: #8f3434;
 
-background: #fee2e2;
+background: #fbe8e8;
 
-border: 1px solid #fecaca;
+border: 1px solid #f2caca;
 }
 
 /* =========================
@@ -715,11 +710,11 @@ background: #315c6d;
 }
 
 .cancel-btn {
-background: #dc2626;
+background: #c94b4b;
 }
 
 .cancel-btn:hover {
-background: #b91c1c;
+background: #ad3e3e;
 }
 
 /* =========================
@@ -753,7 +748,7 @@ justify-content: center;
 
 padding: 20px;
 
-background: rgba(15, 23, 42, 0.60);
+background: rgba(38, 56, 61, 0.60);
 
 z-index: 9999;
 }
@@ -782,7 +777,7 @@ box-shadow:
 .modal-box h2 {
 margin-top: 0;
 
-color: #0f172a;
+color: #30464c;
 }
 
 .detail-row {
@@ -865,40 +860,45 @@ grid-template-columns: 1fr;
 @media (max-width: 650px) {
 
 .hero {
-padding: 27px 16px;
+padding: 27px 14px;
+}
+
+.hero::before {
+top: 5px;
+right: -10px;
+font-size: 55px;
+letter-spacing: 9px;
+opacity: 0.12;
+}
+
+.hero::after {
+bottom: -15px;
+left: -15px;
+font-size: 60px;
+letter-spacing: 12px;
+opacity: 0.09;
 }
 
 .school-name,
 .hero h1 {
-font-size: 20px;
+font-size: 21px;
 }
 
-.hero-subtitle,
-.hero p:not(.school-name) {
+.hero-subtitle {
 font-size: 14px;
-}
-
-.hero::before {
-font-size: 48px;
-letter-spacing: 7px;
-}
-
-.hero::after {
-font-size: 55px;
-letter-spacing: 8px;
 }
 
 .container {
 width: min(100% - 20px, 1100px);
 
 ```
-margin-top: 18px;
+margin-top: 20px;
 ```
 
 }
 
 .card {
-padding: 17px;
+padding: 18px;
 
 ```
 border-radius: 15px;
@@ -906,7 +906,6 @@ border-radius: 15px;
 
 }
 
-/* يظل خانتين في الصف على الموبايل */
 .grid {
 grid-template-columns:
 repeat(2, minmax(0, 1fr));
@@ -948,7 +947,9 @@ width: 100%;
 .detail-row {
 flex-direction: column;
 
+```
 gap: 3px;
+```
 
 }
 
@@ -968,16 +969,22 @@ padding: 20px;
 
 @media (max-width: 390px) {
 
+.hero::before {
+font-size: 45px;
+letter-spacing: 6px;
+}
+
+.hero::after {
+font-size: 50px;
+letter-spacing: 8px;
+}
+
 .grid {
 gap: 6px;
 }
 
 .grid > div {
-padding: 9px 8px;
-}
-
-.grid span {
-font-size: 11px;
+padding: 8px;
 }
 
 .grid strong {
@@ -994,9 +1001,11 @@ Print
 .hero {
 color: #000000;
 
+```
 background: #ffffff;
 
 box-shadow: none;
+```
 
 }
 
@@ -1010,7 +1019,9 @@ display: none !important;
 .stat {
 box-shadow: none;
 
+```
 border: 1px solid #ddd;
+```
 
 }
 }
