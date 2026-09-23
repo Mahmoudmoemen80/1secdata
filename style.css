@@ -1,23 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@500;600;700;800&display=swap');
+
 * {
   box-sizing: border-box;
   }
 
 :root {
---primary: #477a5b;
---primary-dark: #356344;
---secondary: #7da58a;
---success: #3f8f5b;
---danger: #c94b4b;
---warning: #c47a24;
+--primary: #176b70;
+--primary-dark: #0f5055;
+--secondary: #c89f68;
 
---bg: #f5f8f3;
---card: #ffffff;
---text: #26352a;
---muted: #6d796f;
---border: #dce6dc;
+--success: #39745b;
+--danger: #b94b4b;
+--warning: #b47b38;
+
+--bg: #f4eee4;
+--bg-soft: #eee5d7;
+
+--card: #fffdf9;
+--card-soft: #faf5ec;
+
+--text: #293b3c;
+--muted: #718080;
+
+--border: #e3d8c7;
 
 --radius: 18px;
---shadow: 0 10px 30px rgba(48, 77, 55, 0.08);
+
+--shadow:
+0 10px 30px rgba(70, 55, 38, 0.09);
 }
 
 html {
@@ -29,6 +39,7 @@ margin: 0;
 min-height: 100vh;
 
 font-family:
+"Cairo",
 "Tahoma",
 "Arial",
 sans-serif;
@@ -36,8 +47,8 @@ sans-serif;
 background:
 linear-gradient(
 180deg,
-#edf5ed 0,
-#f5f8f3 320px
+#efe6d8 0,
+#f4eee4 320px
 );
 
 color: var(--text);
@@ -51,38 +62,35 @@ Header
 .hero {
 position: relative;
 
-padding: 34px 20px;
+padding: 38px 20px 34px;
 
-color: #ffffff;
+color: #fffaf1;
 
 text-align: center;
 
 background:
 linear-gradient(
 135deg,
-#4d7658 0%,
-#67906d 48%,
-#88a982 100%
+#104f54 0%,
+#176b70 48%,
+#2b7778 100%
 );
 
 box-shadow:
-0 8px 25px rgba(63, 99, 70, 0.16);
+0 8px 28px rgba(23, 107, 112, 0.18);
 
 overflow: hidden;
 }
-
-/* أيقونات المدرسة */
 
 .hero::before {
 content: "🏫   📚   🎓   ✏️";
 
 position: absolute;
 
-top: 5px;
+top: 4px;
 right: 1%;
 
 font-size: 78px;
-
 line-height: 1;
 
 letter-spacing: 18px;
@@ -103,11 +111,10 @@ content: "📖   🏫   📚";
 
 position: absolute;
 
-bottom: -25px;
+bottom: -28px;
 left: 2%;
 
 font-size: 84px;
-
 line-height: 1;
 
 letter-spacing: 22px;
@@ -126,38 +133,110 @@ user-select: none;
 .hero > div {
 position: relative;
 
-z-index: 1;
+z-index: 2;
 
 width: min(1100px, 100%);
 
 margin: auto;
 }
 
-.school-name,
-.hero h1 {
-margin: 0;
-
-font-size: clamp(21px, 3vw, 27px);
-
-line-height: 1.4;
-
-font-weight: 700;
-}
+/* =========================
+الإدارة والمدرسة
+خط Amiri
+========================= */
 
 .school-name {
-margin-bottom: 2px;
+margin: 0;
+
+color: #f8e7cb;
+
+font-family:
+"Amiri",
+"Times New Roman",
+serif;
+
+font-size:
+clamp(25px, 3.2vw, 34px);
+
+font-weight: 700;
+
+line-height: 1.35;
+
+letter-spacing: 0;
+
+text-shadow:
+0 2px 5px rgba(0, 0, 0, 0.18);
 }
+
+/* =========================
+العنوان الرئيسي
+خط Amiri
+========================= */
 
 .hero h1 {
-margin-top: 4px;
-}
-
-.hero-subtitle {
 margin: 7px 0 0;
 
-font-size: 16px;
+color: #fffdf8;
 
-opacity: 0.96;
+font-family:
+"Amiri",
+"Times New Roman",
+serif;
+
+font-size:
+clamp(27px, 3.7vw, 37px);
+
+font-weight: 700;
+
+line-height: 1.45;
+
+letter-spacing: 0;
+
+text-shadow:
+0 2px 6px rgba(0, 0, 0, 0.20);
+}
+
+/* =========================
+عبارة الاستعلام
+أوضح وأجمل
+========================= */
+
+.hero-subtitle {
+display: inline-block;
+
+margin: 13px 0 0;
+
+padding:
+7px 20px;
+
+color: #fffdf8;
+
+font-family:
+"Amiri",
+"Times New Roman",
+serif;
+
+font-size:
+clamp(21px, 2.6vw, 27px);
+
+font-weight: 700;
+
+line-height: 1.55;
+
+background:
+rgba(8, 54, 57, 0.45);
+
+border:
+1px solid
+rgba(255, 255, 255, 0.28);
+
+border-radius: 11px;
+
+text-shadow:
+0 1px 3px rgba(0, 0, 0, 0.25);
+
+box-shadow:
+0 4px 12px rgba(0, 0, 0, 0.10);
 }
 
 /* =========================
@@ -165,9 +244,14 @@ Main
 ========================= */
 
 .container {
-width: min(1100px, calc(100% - 30px));
+width:
+min(
+1100px,
+calc(100% - 30px)
+);
 
-margin: 35px auto 60px;
+margin:
+35px auto 60px;
 }
 
 /* =========================
@@ -177,7 +261,8 @@ Cards
 .card {
 background: var(--card);
 
-border: 1px solid rgba(220, 230, 220, 0.95);
+border:
+1px solid var(--border);
 
 border-radius: var(--radius);
 
@@ -195,7 +280,7 @@ margin-bottom: 20px;
 
 font-size: 22px;
 
-color: #38553e;
+color: var(--primary-dark);
 }
 
 /* =========================
@@ -205,11 +290,12 @@ Forms
 label {
 display: block;
 
-margin: 15px 0 7px;
+margin:
+15px 0 7px;
 
 font-weight: 700;
 
-color: #405344;
+color: #4e5d5b;
 }
 
 input,
@@ -219,13 +305,15 @@ width: 100%;
 
 max-width: 100%;
 
-padding: 13px 15px;
+padding:
+13px 15px;
 
-border: 1px solid var(--border);
+border:
+1px solid var(--border);
 
 border-radius: 12px;
 
-background: #ffffff;
+background: #fffdf9;
 
 color: var(--text);
 
@@ -237,7 +325,14 @@ outline: none;
 
 transition:
 border-color 0.2s,
-box-shadow 0.2s;
+box-shadow 0.2s,
+background 0.2s;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+background: #ffffff;
 }
 
 input:focus,
@@ -245,8 +340,11 @@ select:focus,
 textarea:focus {
 border-color: var(--primary);
 
+background: #ffffff;
+
 box-shadow:
-0 0 0 4px rgba(71, 122, 91, 0.12);
+0 0 0 4px
+rgba(23, 107, 112, 0.11);
 }
 
 /* =========================
@@ -259,7 +357,8 @@ border: 0;
 
 border-radius: 12px;
 
-padding: 12px 20px;
+padding:
+12px 20px;
 
 font-family: inherit;
 
@@ -277,12 +376,14 @@ opacity 0.15s;
 
 button:hover,
 .primary-btn:hover {
-transform: translateY(-1px);
+transform:
+translateY(-1px);
 }
 
 button:active,
 .primary-btn:active {
-transform: translateY(0);
+transform:
+translateY(0);
 }
 
 .primary-btn {
@@ -299,54 +400,51 @@ color: #ffffff;
 background:
 linear-gradient(
 135deg,
-var(--primary),
-var(--primary-dark)
+#176b70,
+#0f5055
 );
 
 box-shadow:
-0 7px 18px rgba(71, 122, 91, 0.22);
+0 7px 18px
+rgba(23, 107, 112, 0.22);
 }
 
 .primary-btn:hover {
 box-shadow:
-0 10px 22px rgba(71, 122, 91, 0.28);
-}
-
-.secondary {
-background: #e6eee7;
-
-color: #3e5443;
-}
-
-.secondary:hover {
-background: #d8e5da;
+0 10px 23px
+rgba(23, 107, 112, 0.28);
 }
 
 /* =========================
-Student information
+Student Information
 ========================= */
 
 .grid {
 display: grid;
 
 grid-template-columns:
-repeat(2, minmax(0, 1fr));
+repeat(
+2,
+minmax(0, 1fr)
+);
 
 gap: 8px;
 }
 
 .grid > div {
-padding: 11px 13px;
+padding:
+11px 13px;
 
-border: 1px solid var(--border);
+border:
+1px solid var(--border);
 
 border-radius: 12px;
 
 background:
 linear-gradient(
 180deg,
-#ffffff,
-#f7faf6
+#fffdf9,
+#faf5ec
 );
 }
 
@@ -365,11 +463,11 @@ display: block;
 
 font-size: 16px;
 
-color: #304333;
+color: #30494a;
 }
 
 /* =========================
-Continue area
+Continue Area
 ========================= */
 
 .continue-area {
@@ -384,15 +482,17 @@ border-radius: 15px;
 background:
 linear-gradient(
 135deg,
-#eef6ef,
-#f4f8f2
+#f6eee1,
+#edf4f1
 );
 
-border: 1px solid #d7e5d8;
+border:
+1px solid #e1d5c2;
 }
 
 .continue-area p {
-margin: 8px 0 0;
+margin:
+8px 0 0;
 
 color: var(--muted);
 
@@ -411,7 +511,8 @@ Messages
 #loginMsg {
 margin-top: 15px;
 
-padding: 12px 15px;
+padding:
+12px 15px;
 
 border-radius: 12px;
 
@@ -419,19 +520,21 @@ font-weight: 700;
 }
 
 .message.success {
-color: #27633b;
+color: #286149;
 
-background: #e5f4e8;
+background: #e5f2eb;
 
-border: 1px solid #c7e6cd;
+border:
+1px solid #c8e2d3;
 }
 
 .message.error {
-color: #8f3434;
+color: #8f3838;
 
-background: #fbe8e8;
+background: #f9e7e4;
 
-border: 1px solid #f2caca;
+border:
+1px solid #efc9c4;
 }
 
 /* =========================
@@ -443,13 +546,14 @@ display: none !important;
 }
 
 /* =========================
-Admin header
+Admin
 ========================= */
 
 .admin-header {
 display: flex;
 
-justify-content: space-between;
+justify-content:
+space-between;
 
 align-items: center;
 
@@ -465,7 +569,8 @@ align-items: center;
 
 justify-content: center;
 
-padding: 10px 18px;
+padding:
+10px 18px;
 
 border-radius: 10px;
 
@@ -475,18 +580,18 @@ text-decoration: none;
 
 font-weight: 700;
 
-background: rgba(255, 255, 255, 0.14);
+background:
+rgba(255, 255, 255, 0.12);
 
-border: 1px solid rgba(255, 255, 255, 0.25);
+border:
+1px solid
+rgba(255, 255, 255, 0.25);
 }
 
 .admin-link:hover {
-background: rgba(255, 255, 255, 0.22);
+background:
+rgba(255, 255, 255, 0.20);
 }
-
-/* =========================
-Admin statistics
-========================= */
 
 .stats {
 display: grid;
@@ -506,11 +611,12 @@ padding: 24px;
 
 text-align: center;
 
-background: #ffffff;
+background: var(--card);
+
+border:
+1px solid var(--border);
 
 border-radius: 18px;
-
-border: 1px solid var(--border);
 
 box-shadow: var(--shadow);
 
@@ -554,10 +660,6 @@ color: var(--muted);
 font-weight: 700;
 }
 
-/* =========================
-Admin toolbar
-========================= */
-
 .toolbar {
 display: grid;
 
@@ -584,16 +686,13 @@ margin: 0;
 white-space: nowrap;
 }
 
-/* =========================
-Table
-========================= */
-
 .table-wrap {
 width: 100%;
 
 overflow-x: auto;
 
-border: 1px solid var(--border);
+border:
+1px solid var(--border);
 
 border-radius: 14px;
 }
@@ -605,14 +704,16 @@ border-collapse: collapse;
 
 min-width: 1400px;
 
-background: #ffffff;
+background: #fffdf9;
 }
 
 th,
 td {
-padding: 12px 10px;
+padding:
+12px 10px;
 
-border-bottom: 1px solid var(--border);
+border-bottom:
+1px solid var(--border);
 
 text-align: center;
 
@@ -626,24 +727,16 @@ top: 0;
 
 z-index: 2;
 
-color: #405344;
+color: #425354;
 
-background: #f2f7f2;
+background: #f3eadc;
 
 font-size: 14px;
 }
 
-tbody tr {
-transition: background 0.15s;
-}
-
 tbody tr:hover {
-background: #f5f9f5;
+background: #faf5ec;
 }
-
-/* =========================
-Status badges
-========================= */
 
 .badge {
 display: inline-flex;
@@ -652,7 +745,8 @@ align-items: center;
 
 justify-content: center;
 
-padding: 5px 11px;
+padding:
+5px 11px;
 
 border-radius: 20px;
 
@@ -662,24 +756,22 @@ font-weight: 800;
 }
 
 .badge.ok {
-color: #27633b;
+color: #286149;
 
-background: #e5f4e8;
+background: #e5f2eb;
 
-border: 1px solid #c7e6cd;
+border:
+1px solid #c8e2d3;
 }
 
 .badge.no {
-color: #8f3434;
+color: #8f3838;
 
-background: #fbe8e8;
+background: #f9e7e4;
 
-border: 1px solid #f2caca;
+border:
+1px solid #efc9c4;
 }
-
-/* =========================
-Admin action buttons
-========================= */
 
 .details-btn,
 .cancel-btn {
@@ -687,7 +779,8 @@ border: 0;
 
 border-radius: 9px;
 
-padding: 7px 12px;
+padding:
+7px 12px;
 
 cursor: pointer;
 
@@ -701,24 +794,20 @@ margin: 2px;
 }
 
 .details-btn {
-background: #477a5b;
+background: #176b70;
 }
 
 .details-btn:hover {
-background: #356344;
+background: #0f5055;
 }
 
 .cancel-btn {
-background: #c94b4b;
+background: #b94b4b;
 }
 
 .cancel-btn:hover {
-background: #ad3e3e;
+background: #9e3e3e;
 }
-
-/* =========================
-Empty
-========================= */
 
 .empty {
 padding: 35px !important;
@@ -747,7 +836,8 @@ justify-content: center;
 
 padding: 20px;
 
-background: rgba(38, 53, 42, 0.60);
+background:
+rgba(41, 59, 60, 0.62);
 
 z-index: 9999;
 }
@@ -757,7 +847,8 @@ display: none;
 }
 
 .modal-box {
-width: min(620px, 100%);
+width:
+min(620px, 100%);
 
 max-height: 90vh;
 
@@ -767,28 +858,32 @@ padding: 28px;
 
 border-radius: 20px;
 
-background: #ffffff;
+background: #fffdf9;
 
 box-shadow:
-0 25px 70px rgba(0, 0, 0, 0.20);
+0 25px 70px
+rgba(55, 44, 31, 0.22);
 }
 
 .modal-box h2 {
 margin-top: 0;
 
-color: #38553e;
+color: var(--primary-dark);
 }
 
 .detail-row {
 display: flex;
 
-justify-content: space-between;
+justify-content:
+space-between;
 
 gap: 20px;
 
-padding: 13px 0;
+padding:
+13px 0;
 
-border-bottom: 1px solid var(--border);
+border-bottom:
+1px solid var(--border);
 }
 
 .detail-row span {
@@ -811,10 +906,6 @@ width: 100%;
 margin-top: 20px;
 }
 
-/* =========================
-Login
-========================= */
-
 #loginCard {
 max-width: 500px;
 
@@ -824,10 +915,6 @@ margin: 40px auto;
 #loginForm .primary-btn {
 width: 100%;
 }
-
-/* =========================
-Loading / disabled
-========================= */
 
 button:disabled {
 opacity: 0.6;
@@ -844,22 +931,26 @@ Responsive
 @media (max-width: 900px) {
 
 .toolbar {
-grid-template-columns: 1fr 1fr;
+grid-template-columns:
+1fr 1fr;
 }
 
 .toolbar input {
-grid-column: 1 / -1;
+grid-column:
+1 / -1;
 }
 
 .stats {
-grid-template-columns: 1fr;
+grid-template-columns:
+1fr;
 }
 }
 
 @media (max-width: 650px) {
 
 .hero {
-padding: 27px 14px;
+padding:
+28px 14px 27px;
 }
 
 .hero::before {
@@ -892,17 +983,39 @@ opacity: 0.10;
 
 }
 
-.school-name,
+.school-name {
+font-size: 23px;
+}
+
 .hero h1 {
-font-size: 21px;
+font-size: 25px;
+
+```
+line-height: 1.5;
+```
+
 }
 
 .hero-subtitle {
-font-size: 14px;
+margin-top: 13px;
+
+```
+padding:
+  5px 12px;
+
+font-size: 20px;
+
+line-height: 1.65;
+```
+
 }
 
 .container {
-width: min(100% - 20px, 1100px);
+width:
+min(
+100% - 20px,
+1100px
+);
 
 ```
 margin-top: 20px;
@@ -921,7 +1034,10 @@ border-radius: 15px;
 
 .grid {
 grid-template-columns:
-repeat(2, minmax(0, 1fr));
+repeat(
+2,
+minmax(0, 1fr)
+);
 
 ```
 gap: 7px;
@@ -942,7 +1058,8 @@ font-size: 14px;
 }
 
 .toolbar {
-grid-template-columns: 1fr;
+grid-template-columns:
+1fr;
 }
 
 .toolbar input {
@@ -1000,6 +1117,18 @@ letter-spacing: 7px;
 
 }
 
+.school-name {
+font-size: 21px;
+}
+
+.hero h1 {
+font-size: 23px;
+}
+
+.hero-subtitle {
+font-size: 19px;
+}
+
 .grid {
 gap: 6px;
 }
@@ -1012,10 +1141,6 @@ padding: 8px;
 font-size: 13px;
 }
 }
-
-/* =========================
-Print
-========================= */
 
 @media print {
 
@@ -1041,7 +1166,8 @@ display: none !important;
 box-shadow: none;
 
 ```
-border: 1px solid #ddd;
+border:
+  1px solid #ddd;
 ```
 
 }
