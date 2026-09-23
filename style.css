@@ -1131,3 +1131,26 @@ padding: 8px;
 
 .grid strong {
 fon
+.site-footer {
+  width: min(1100px, calc(100% - 30px));
+  margin: 0 auto 28px;
+  padding: 16px 20px;
+  text-align: center;
+  color: #6f7775;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  background: rgba(255, 253, 249, 0.78);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(70, 55, 38, 0.06);
+}
+
+@media (max-width: 650px) {
+  .site-footer {
+    width: calc(100% - 20px);
+    margin-bottom: 18px;
+    padding: 13px 12px;
+    font-size: 13px;
+  }
+}
