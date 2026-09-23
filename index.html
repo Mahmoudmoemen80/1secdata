@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="ar" dir="rtl">
 
 <head>
@@ -14,8 +15,17 @@
 
 <header class="hero">
   <div>
-    <h1>نموذج استكمال بيانات الطلاب - الصف الأول الثانوي 2026-2027</h1>
-    <p>أدخل الرقم القومي للاستعلام عن بياناتك</p>
+
+```
+<p class="school-name">إدارة أطسا التعليمية</p>
+
+<p class="school-name">مدرسة جردو الثانوية</p>
+
+<h1>نموذج استكمال بيانات الطلاب - الصف الأول الثانوي 2026-2027</h1>
+
+<p class="hero-subtitle">أدخل الرقم القومي للاستعلام عن بياناتك</p>
+```
+
   </div>
 </header>
 
@@ -23,94 +33,98 @@
 
   <section class="card">
 
-    <h2>الاستعلام عن الطالب</h2>
+```
+<h2>الاستعلام عن الطالب</h2>
 
-    <form id="searchForm">
+<form id="searchForm">
 
-      <label for="nationalId">
-        الرقم القومي
-      </label>
+  <label for="nationalId">
+    الرقم القومي
+  </label>
 
-      <input
-        id="nationalId"
-        type="text"
-        inputmode="numeric"
-        maxlength="14"
-        autocomplete="off"
-        placeholder="أدخل الرقم القومي المكون من 14 رقمًا"
-        required
-      >
+  <input
+    id="nationalId"
+    type="text"
+    inputmode="numeric"
+    maxlength="14"
+    autocomplete="off"
+    placeholder="أدخل الرقم القومي المكون من 14 رقمًا"
+    required
+  >
 
-      <button type="submit" class="primary-btn">
-        بحث
-      </button>
+  <button type="submit" class="primary-btn">
+    بحث
+  </button>
 
-    </form>
+</form>
 
-    <div id="message"></div>
+<div id="message"></div>
+```
 
   </section>
 
-
   <section id="studentCard" class="card hidden">
 
-    <h2>بيانات الطالب</h2>
+```
+<h2>بيانات الطالب</h2>
 
-    <div class="grid">
+<div class="grid">
 
-      <div>
-        <span>الاسم</span>
-        <strong id="sName"></strong>
-      </div>
+  <div>
+    <span>الاسم</span>
+    <strong id="sName"></strong>
+  </div>
 
-      <div>
-        <span>كود الطالب</span>
-        <strong id="sCode"></strong>
-      </div>
+  <div>
+    <span>كود الطالب</span>
+    <strong id="sCode"></strong>
+  </div>
 
-      <div>
-        <span>الفصل</span>
-        <strong id="sClass"></strong>
-      </div>
+  <div>
+    <span>الفصل</span>
+    <strong id="sClass"></strong>
+  </div>
 
-      <div>
-        <span>رقم الملف بالمدرسة</span>
-        <strong id="sFile"></strong>
-      </div>
+  <div>
+    <span>رقم الملف بالمدرسة</span>
+    <strong id="sFile"></strong>
+  </div>
 
-      <div>
-        <span>الرقم القومي</span>
-        <strong id="sNational"></strong>
-      </div>
+  <div>
+    <span>الرقم القومي</span>
+    <strong id="sNational"></strong>
+  </div>
 
-    </div>
+</div>
 
 
-    <!-- زر استكمال البيانات -->
+<!-- زر استكمال البيانات -->
 
-    <div id="continueArea" class="continue-area">
+<div id="continueArea" class="continue-area">
 
-      <button
-        type="button"
-        id="continueBtn"
-        class="primary-btn continue-btn"
-      >
-        استكمال البيانات
-      </button>
+  <button
+    type="button"
+    id="continueBtn"
+    class="primary-btn continue-btn"
+  >
+    استكمال البيانات
+  </button>
 
-      <p>
-        اضغط على الزر لاستكمال بيانات التواصل والعنوان.
-      </p>
+  <p>
+    اضغط على الزر لاستكمال بيانات التواصل والعنوان.
+  </p>
 
-    </div>
+</div>
+```
 
   </section>
 
 </main>
 
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="config.js"></script>
+
 <script src="app.js"></script>
 
 </body>
