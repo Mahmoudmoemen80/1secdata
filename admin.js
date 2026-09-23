@@ -7,19 +7,10 @@ let allRows = [];
 
 const $ = (id) => document.getElementById(id);
 
-
-/* =========================
-   أدوات
-========================= */
-
 function show(id, visible) {
   const el = $(id);
-
-  if (el) {
-    el.classList.toggle("hidden", !visible);
-  }
+  if (el) el.classList.toggle("hidden", !visible);
 }
-
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -30,41 +21,21 @@ function escapeHtml(value) {
     .replace(/'/g, "&#39;");
 }
 
-
-/* =========================
-   تحميل الطلاب
-========================= */
-
 async function load() {
-
-  const { data, error } =
-    await db.rpc("admin_student_list");
+  const { data, error } = await db.rpc("admin_student_list");
 
   if (error) {
-
     console.error("admin_student_list:", error);
-
-    alert(
-      "تعذر تحميل بيانات الطلاب.\n\n" +
-      error.message
-    );
-
+    alert("تعذر تحميل بيانات الطلاب.\n\n" + error.message);
     return;
   }
 
   allRows = Array.isArray(data) ? data : [];
-
   renderFilters();
   render();
 }
 
-
-/* =========================
-   الفصول
-========================= */
-
 function renderFilters() {
-
   const classes = [
     ...new Set(
       allRows
@@ -72,12 +43,8 @@ function renderFilters() {
         .filter(Boolean)
     )
   ].sort((a, b) =>
-    String(a).localeCompare(
-      String(b),
-      "ar"
-    )
+    String(a).localeCompare(String(b), "ar")
   );
-
 
   $("classFilter").innerHTML =
     '<option value="all">كل الفصول</option>' +
@@ -86,22 +53,10 @@ function renderFilters() {
     ).join("");
 }
 
-
-/* =========================
-   الفلترة
-========================= */
-
 function getFilteredRows() {
-
-  const q =
-    $("search").value.trim().toLowerCase();
-
-  const status =
-    $("status").value;
-
-  const className =
-    $("classFilter").value;
-
+  const q = $("search").value.trim().toLowerCase();
+  const status = $("status").value;
+  const className = $("classFilter").value;
 
   return allRows.filter(row => {
 
@@ -118,38 +73,23 @@ function getFilteredRows() {
           .includes(q)
       );
 
-
     const statusMatch =
       status === "all" ||
       (status === "registered" && row.registered === true) ||
       (status === "unregistered" && row.registered === false);
 
-
     const classMatch =
       className === "all" ||
       row.class_name === className;
 
-
-    return (
-      searchMatch &&
-      statusMatch &&
-      classMatch
-    );
+    return searchMatch && statusMatch && classMatch;
   });
 }
 
-
-/* =========================
-   عرض الجدول
-========================= */
-
 function render() {
-
   const rows = getFilteredRows();
 
-
-  $("total").textContent =
-    allRows.length;
+  $("total").textContent = allRows.length;
 
   $("registered").textContent =
     allRows.filter(row => row.registered === true).length;
@@ -157,9 +97,7 @@ function render() {
   $("unregistered").textContent =
     allRows.filter(row => row.registered === false).length;
 
-
   if (!rows.length) {
-
     $("rows").innerHTML = `
       <tr>
         <td colspan="12" class="empty">
@@ -167,23 +105,18 @@ function render() {
         </td>
       </tr>
     `;
-
     return;
   }
-
 
   $("rows").innerHTML =
     rows.map(row => {
 
-      const index =
-        allRows.indexOf(row);
-
+      const index = allRows.indexOf(row);
 
       const status =
         row.registered
-          ? `<span class="badge ok">مسجل</span>`
-          : `<span class="badge no">غير مسجل</span>`;
-
+          ? '<span class="badge ok">مسجل</span>'
+          : '<span class="badge no">غير مسجل</span>';
 
       const actions =
         row.registered
@@ -192,10 +125,309 @@ function render() {
               type="button"
               class="details-btn"
               data-action="details"
-              data-index="${index}"
-            >
+              data-index="${index}">
               التفاصيل
             </button>
 
             <button
               type="button"
+              class="cancel-btn"
+              data-action="cancel"
+              data-index="${index}">
+              إلغاء التسجيل
+            </button>
+          `
+          : "—";
+
+      return `
+        <tr>
+          <td>${escapeHtml(row.student_number)}</td>
+          <td>${escapeHtml(row.name)}</td>
+          <td>${escapeHtml(row.student_code)}</td>
+          <td>${escapeHtml(row.class_name)}</td>
+          <td>${escapeHtml(row.school_file_number)}</td>
+          <td>${escapeHtml(row.national_id)}</td>
+          <td>${escapeHtml(row.student_phone || "—")}</td>
+          <td>${escapeHtml(row.guardian_name || "—")}</td>
+          <td>${escapeHtml(row.guardian_phone || "—")}</td>
+          <td>${escapeHtml(row.address || "—")}</td>
+          <td>${status}</td>
+          <td>${actions}</td>
+        </tr>
+      `;
+    }).join("");
+}
+
+function showDetails(row) {
+  $("detailsContent").innerHTML = `
+    <div class="detail-row">
+      <span>الاسم</span>
+      <strong>${escapeHtml(row.name)}</strong>
+    </div>
+
+    <div class="detail-row">
+      <span>رقم الطالب</span>
+      <strong>${escapeHtml(row.student_number)}</strong>
+    </div>
+
+    <div class="detail-row">
+      <span>كود الطالب</span>
+      <strong>${escapeHtml(row.student_code)}</strong>
+    </div>
+
+    <div class="detail-row">
+      <span>الفصل</span>
+      <strong>${escapeHtml(row.class_name)}</strong>
+    </div>
+
+    <div class="detail-row">
+      <span>رقم الملف</span>
+      <strong>${escapeHtml(row.school_file_number)}</strong>
+    </div>
+
+    <div class="detail-row">
+      <span>الرقم القومي</span>
+      <strong>${escapeHtml(row.national_id)}</strong>
+    </div>
+
+    <div class="detail-row">
+      <span>هاتف الطالب</span>
+      <strong>${escapeHtml(row.student_phone || "—")}</strong>
+    </div>
+
+    <div class="detail-row">
+      <span>اسم ولي الأمر</span>
+      <strong>${escapeHtml(row.guardian_name || "—")}</strong>
+    </div>
+
+    <div class="detail-row">
+      <span>هاتف ولي الأمر</span>
+      <strong>${escapeHtml(row.guardian_phone || "—")}</strong>
+    </div>
+
+    <div class="detail-row">
+      <span>العنوان</span>
+      <strong>${escapeHtml(row.address || "—")}</strong>
+    </div>
+  `;
+
+  $("detailsModal").classList.remove("hidden");
+}
+
+async function cancelRegistration(row) {
+
+  const confirmed = confirm(
+    `هل تريد إلغاء تسجيل الطالب؟\n\n` +
+    `${row.name}\n\n` +
+    `سيتم حذف بيانات التسجيل فقط، ولن يتم حذف الطالب من قاعدة البيانات.\n\n` +
+    `بعد ذلك يستطيع الطالب التسجيل مرة أخرى.`
+  );
+
+  if (!confirmed) return;
+
+  const { data, error } =
+    await db.rpc("cancel_student_registration", {
+      p_student_id: row.id
+    });
+
+  if (error) {
+    console.error("cancel_student_registration:", error);
+
+    alert(
+      "حدث خطأ أثناء إلغاء التسجيل:\n\n" +
+      error.message
+    );
+
+    return;
+  }
+
+  if (!data || data.success !== true) {
+    alert(
+      data?.message ||
+      "لم يتم إلغاء التسجيل."
+    );
+    return;
+  }
+
+  alert(
+    "تم إلغاء التسجيل بنجاح.\n\n" +
+    "يمكن للطالب التسجيل مرة أخرى."
+  );
+
+  await load();
+}
+
+$("rows").addEventListener("click", async event => {
+
+  const button =
+    event.target.closest("button");
+
+  if (!button) return;
+
+  const index =
+    Number(button.dataset.index);
+
+  if (
+    Number.isNaN(index) ||
+    !allRows[index]
+  ) {
+    return;
+  }
+
+  const row = allRows[index];
+
+  if (button.dataset.action === "details") {
+    showDetails(row);
+    return;
+  }
+
+  if (button.dataset.action === "cancel") {
+    await cancelRegistration(row);
+  }
+});
+
+$("closeDetails").addEventListener("click", () => {
+  $("detailsModal").classList.add("hidden");
+});
+
+$("detailsModal").addEventListener("click", event => {
+
+  if (event.target === $("detailsModal")) {
+    $("detailsModal").classList.add("hidden");
+  }
+});
+
+$("loginForm").addEventListener("submit", async event => {
+
+  event.preventDefault();
+
+  $("loginMsg").textContent =
+    "جاري تسجيل الدخول...";
+
+  const email =
+    $("email").value.trim();
+
+  const password =
+    $("password").value;
+
+  if (!email || !password) {
+    $("loginMsg").textContent =
+      "اكتب البريد الإلكتروني وكلمة المرور.";
+    return;
+  }
+
+  const { error } =
+    await db.auth.signInWithPassword({
+      email,
+      password
+    });
+
+  if (error) {
+    console.error("Login error:", error);
+
+    $("loginMsg").textContent =
+      "بيانات الدخول غير صحيحة.";
+
+    return;
+  }
+
+  $("loginMsg").textContent = "";
+
+  show("loginCard", false);
+  show("dashboard", true);
+
+  await load();
+});
+
+$("logoutBtn").addEventListener("click", async () => {
+  await db.auth.signOut();
+  location.reload();
+});
+
+$("search").addEventListener("input", render);
+
+$("status").addEventListener("change", render);
+
+$("classFilter").addEventListener("change", render);
+
+$("exportBtn").addEventListener("click", () => {
+
+  const rows = getFilteredRows();
+
+  const headers = [
+    "رقم الطالب",
+    "الاسم",
+    "الكود",
+    "الفصل",
+    "رقم الملف",
+    "الرقم القومي",
+    "هاتف الطالب",
+    "اسم ولي الأمر",
+    "هاتف ولي الأمر",
+    "العنوان",
+    "الحالة"
+  ];
+
+  const data = [
+    headers,
+    ...rows.map(row => [
+      row.student_number,
+      row.name,
+      row.student_code,
+      row.class_name,
+      row.school_file_number,
+      row.national_id,
+      row.student_phone || "",
+      row.guardian_name || "",
+      row.guardian_phone || "",
+      row.address || "",
+      row.registered ? "مسجل" : "غير مسجل"
+    ])
+  ];
+
+  const csv =
+    data.map(row =>
+      row.map(value =>
+        `"${String(value ?? "").replace(/"/g, '""')}"`
+      ).join(",")
+    ).join("\n");
+
+  const blob =
+    new Blob(
+      ["\ufeff" + csv],
+      { type: "text/csv;charset=utf-8" }
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+  a.download = "بيانات_الطلاب.csv";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+});
+
+(async () => {
+
+  const {
+    data: { session }
+  } = await db.auth.getSession();
+
+  if (session) {
+
+    show("loginCard", false);
+    show("dashboard", true);
+
+    await load();
+  }
+
+})();
