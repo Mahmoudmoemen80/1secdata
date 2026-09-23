@@ -1,4 +1,3 @@
-```javascript
 const db = window.supabase.createClient(
   APP_CONFIG.SUPABASE_URL,
   APP_CONFIG.SUPABASE_ANON_KEY
@@ -40,10 +39,16 @@ $("searchForm").addEventListener("submit", async (e) => {
   try {
     const { data, error } = await db.rpc(
       "find_student_by_national_id",
-      { p_national_id: nationalId }
+      {
+        p_national_id: nationalId
+      }
     );
 
-    console.log("Search result:", { data, error, nationalId });
+    console.log("Search result:", {
+      data,
+      error,
+      nationalId
+    });
 
     if (error) {
       console.error("Supabase RPC error:", error);
@@ -91,12 +96,15 @@ $("registerForm").addEventListener("submit", async (e) => {
   $("saveBtn").textContent = "جاري التسجيل...";
 
   try {
-    const { error } = await db.rpc("register_student", {
-      p_student_id: currentStudent.id,
-      p_student_phone: $("studentPhone").value.trim(),
-      p_father_phone: $("fatherPhone").value.trim(),
-      p_address: $("address").value.trim()
-    });
+    const { error } = await db.rpc(
+      "register_student",
+      {
+        p_student_id: currentStudent.id,
+        p_student_phone: $("studentPhone").value.trim(),
+        p_father_phone: $("fatherPhone").value.trim(),
+        p_address: $("address").value.trim()
+      }
+    );
 
     if (error) {
       console.error("Registration error:", error);
@@ -106,6 +114,7 @@ $("registerForm").addEventListener("submit", async (e) => {
           ? "هذا الطالب مسجل بالفعل."
           : "تعذر تسجيل البيانات."
       );
+
     } else {
       msg("تم التسجيل بنجاح", true);
       $("registerForm").reset();
@@ -121,4 +130,3 @@ $("registerForm").addEventListener("submit", async (e) => {
     $("saveBtn").textContent = "تسجيل البيانات";
   }
 });
-```
