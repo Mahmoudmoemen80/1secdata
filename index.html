@@ -1,44 +1,252 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>تسجيل بيانات الطلاب</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>نموذج استكمال بيانات الطلاب - الصف الأول الثانوي 2026-2027</title>
+
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<header class="hero"><div><h1>تسجيل بيانات الطلاب</h1><p>أدخل الرقم القومي للاستعلام عن بياناتك</p></div><a class="admin-link" href="admin.html">Admin</a></header>
-<main class="container">
-<section class="card">
-<h2>الاستعلام عن الطالب</h2>
-<form id="searchForm">
-<label>الرقم القومي</label>
-<input id="nationalId" inputmode="numeric" maxlength="14" autocomplete="off" required>
-<button>بحث</button>
-</form>
-<div id="message"></div>
-</section>
-<section id="studentCard" class="card hidden">
-<h2>بيانات الطالب</h2>
-<div class="grid">
-<div><span>الاسم</span><strong id="sName"></strong></div>
-<div><span>كود الطالب</span><strong id="sCode"></strong></div>
-<div><span>الفصل</span><strong id="sClass"></strong></div>
-<div><span>رقم الملف بالمدرسة</span><strong id="sFile"></strong></div>
-<div><span>الرقم القومي</span><strong id="sNational"></strong></div>
-</div>
-<hr>
-<h2>استكمال البيانات</h2>
-<form id="registerForm">
-<label>رقم تليفون الطالب – واتساب</label>
-<input id="studentPhone" type="tel" inputmode="tel" required>
-<label>رقم تليفون الأب – واتساب</label>
-<input id="fatherPhone" type="tel" inputmode="tel" required>
-<label>العنوان</label>
-<textarea id="address" rows="3" required></textarea>
-<button id="saveBtn">تسجيل البيانات</button>
-</form>
-</section>
-</main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script><script src="app.js"></script>
-</body></html>
+
+  <header class="hero">
+    <div class="hero-content">
+      <div class="school-badge">2026 - 2027</div>
+
+      <h1>نموذج استكمال بيانات الطلاب</h1>
+
+      <p>الصف الأول الثانوي 2026-2027</p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- البحث -->
+    <section class="card search-card">
+
+      <div class="section-title">
+        <span class="number">1</span>
+
+        <div>
+          <h2>الاستعلام عن بيانات الطالب</h2>
+          <p>أدخل الرقم القومي للبحث عن بيانات الطالب.</p>
+        </div>
+      </div>
+
+      <form id="searchForm">
+
+        <label for="nationalId">
+          الرقم القومي
+        </label>
+
+        <input
+          id="nationalId"
+          type="text"
+          inputmode="numeric"
+          maxlength="14"
+          autocomplete="off"
+          placeholder="أدخل الرقم القومي المكون من 14 رقمًا"
+          required
+        >
+
+        <button type="submit" class="primary-btn">
+          بحث عن الطالب
+        </button>
+
+      </form>
+
+      <div id="message" class="message"></div>
+
+    </section>
+
+
+    <!-- بيانات الطالب -->
+    <section id="studentCard" class="card hidden">
+
+      <div class="section-title">
+        <span class="number">2</span>
+
+        <div>
+          <h2>بيانات الطالب</h2>
+          <p>راجع بياناتك قبل استكمال التسجيل.</p>
+        </div>
+      </div>
+
+      <div class="student-info">
+
+        <div class="info-item">
+          <span>الاسم</span>
+          <strong id="sName"></strong>
+        </div>
+
+        <div class="info-item">
+          <span>كود الطالب</span>
+          <strong id="sCode"></strong>
+        </div>
+
+        <div class="info-item">
+          <span>الفصل</span>
+          <strong id="sClass"></strong>
+        </div>
+
+        <div class="info-item">
+          <span>رقم الملف بالمدرسة</span>
+          <strong id="sFile"></strong>
+        </div>
+
+        <div class="info-item national-item">
+          <span>الرقم القومي</span>
+          <strong id="sNational"></strong>
+        </div>
+
+      </div>
+
+
+      <!-- زر استكمال البيانات -->
+      <div id="continueArea" class="continue-area">
+
+        <button
+          type="button"
+          id="continueBtn"
+          class="primary-btn continue-btn"
+        >
+          استكمال البيانات
+        </button>
+
+        <p>
+          اضغط على الزر لاستكمال بيانات التواصل والعنوان.
+        </p>
+
+      </div>
+
+
+      <!-- نموذج الاستكمال -->
+      <div id="registrationSection" class="registration-section hidden">
+
+        <div class="section-title small-title">
+
+          <span class="number">3</span>
+
+          <div>
+            <h2>استكمال البيانات</h2>
+            <p>برجاء إدخال البيانات المطلوبة بدقة.</p>
+          </div>
+
+        </div>
+
+        <form id="registerForm">
+
+          <div class="field-group">
+
+            <label for="studentPhone">
+              رقم تليفون الطالب (واتساب)
+            </label>
+
+            <input
+              id="studentPhone"
+              type="tel"
+              inputmode="numeric"
+              maxlength="11"
+              autocomplete="tel"
+              placeholder="01xxxxxxxxx"
+              required
+            >
+
+            <small>
+              يجب أن يتكون الرقم من 11 رقمًا ويبدأ بـ 01.
+            </small>
+
+          </div>
+
+
+          <div class="field-group">
+
+            <label for="guardianName">
+              اسم ولي الأمر
+            </label>
+
+            <input
+              id="guardianName"
+              type="text"
+              autocomplete="name"
+              placeholder="اكتب اسم ولي الأمر"
+              required
+            >
+
+          </div>
+
+
+          <div class="field-group">
+
+            <label for="guardianPhone">
+              رقم ولي الأمر (واتساب)
+            </label>
+
+            <input
+              id="guardianPhone"
+              type="tel"
+              inputmode="numeric"
+              maxlength="11"
+              autocomplete="tel"
+              placeholder="01xxxxxxxxx"
+              required
+            >
+
+            <small>
+              يجب أن يتكون الرقم من 11 رقمًا ويبدأ بـ 01.
+            </small>
+
+          </div>
+
+
+          <div class="field-group">
+
+            <label for="address">
+              العنوان
+            </label>
+
+            <textarea
+              id="address"
+              rows="4"
+              placeholder="اكتب العنوان بالتفصيل"
+              required
+            ></textarea>
+
+          </div>
+
+
+          <button
+            id="saveBtn"
+            type="submit"
+            class="primary-btn save-btn"
+          >
+            تسجيل البيانات
+          </button>
+
+        </form>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+    <p>نموذج استكمال بيانات الطلاب - الصف الأول الثانوي 2026-2027</p>
+  </footer>
+
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- إعدادات المشروع -->
+  <script src="config.js"></script>
+
+  <!-- كود الصفحة -->
+  <script src="app.js"></script>
+
+</body>
+</html>
