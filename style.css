@@ -3,21 +3,21 @@
   }
 
 :root {
---primary: #3f7185;
---primary-dark: #315c6d;
---secondary: #6b9b91;
---success: #2f855a;
+--primary: #477a5b;
+--primary-dark: #356344;
+--secondary: #7da58a;
+--success: #3f8f5b;
 --danger: #c94b4b;
 --warning: #c47a24;
 
---bg: #f4f8f7;
+--bg: #f5f8f3;
 --card: #ffffff;
---text: #26383d;
---muted: #6b7c80;
---border: #dce8e5;
+--text: #26352a;
+--muted: #6d796f;
+--border: #dce6dc;
 
 --radius: 18px;
---shadow: 0 10px 30px rgba(44, 73, 78, 0.08);
+--shadow: 0 10px 30px rgba(48, 77, 55, 0.08);
 }
 
 html {
@@ -36,8 +36,8 @@ sans-serif;
 background:
 linear-gradient(
 180deg,
-#eef7f5 0,
-var(--bg) 300px
+#edf5ed 0,
+#f5f8f3 320px
 );
 
 color: var(--text);
@@ -60,28 +60,28 @@ text-align: center;
 background:
 linear-gradient(
 135deg,
-#527f91 0%,
-#638f99 48%,
-#719f96 100%
+#4d7658 0%,
+#67906d 48%,
+#88a982 100%
 );
 
 box-shadow:
-0 8px 25px rgba(63, 113, 133, 0.16);
+0 8px 25px rgba(63, 99, 70, 0.16);
 
 overflow: hidden;
 }
 
-/* الأيقونات الكبيرة */
+/* أيقونات المدرسة */
 
 .hero::before {
 content: "🏫   📚   🎓   ✏️";
 
 position: absolute;
 
-top: 8px;
-right: 2%;
+top: 5px;
+right: 1%;
 
-font-size: 76px;
+font-size: 78px;
 
 line-height: 1;
 
@@ -89,7 +89,7 @@ letter-spacing: 18px;
 
 white-space: nowrap;
 
-opacity: 0.13;
+opacity: 0.16;
 
 transform: rotate(-4deg);
 
@@ -104,9 +104,9 @@ content: "📖   🏫   📚";
 position: absolute;
 
 bottom: -25px;
-left: 3%;
+left: 2%;
 
-font-size: 82px;
+font-size: 84px;
 
 line-height: 1;
 
@@ -114,7 +114,7 @@ letter-spacing: 22px;
 
 white-space: nowrap;
 
-opacity: 0.10;
+opacity: 0.12;
 
 transform: rotate(3deg);
 
@@ -157,7 +157,7 @@ margin: 7px 0 0;
 
 font-size: 16px;
 
-opacity: 0.95;
+opacity: 0.96;
 }
 
 /* =========================
@@ -177,7 +177,7 @@ Cards
 .card {
 background: var(--card);
 
-border: 1px solid rgba(220, 232, 229, 0.95);
+border: 1px solid rgba(220, 230, 220, 0.95);
 
 border-radius: var(--radius);
 
@@ -195,7 +195,7 @@ margin-bottom: 20px;
 
 font-size: 22px;
 
-color: #30464c;
+color: #38553e;
 }
 
 /* =========================
@@ -209,7 +209,7 @@ margin: 15px 0 7px;
 
 font-weight: 700;
 
-color: #3c555b;
+color: #405344;
 }
 
 input,
@@ -237,8 +237,7 @@ outline: none;
 
 transition:
 border-color 0.2s,
-box-shadow 0.2s,
-transform 0.2s;
+box-shadow 0.2s;
 }
 
 input:focus,
@@ -247,7 +246,7 @@ textarea:focus {
 border-color: var(--primary);
 
 box-shadow:
-0 0 0 4px rgba(63, 113, 133, 0.10);
+0 0 0 4px rgba(71, 122, 91, 0.12);
 }
 
 /* =========================
@@ -305,22 +304,22 @@ var(--primary-dark)
 );
 
 box-shadow:
-0 7px 18px rgba(63, 113, 133, 0.20);
+0 7px 18px rgba(71, 122, 91, 0.22);
 }
 
 .primary-btn:hover {
 box-shadow:
-0 10px 22px rgba(63, 113, 133, 0.25);
+0 10px 22px rgba(71, 122, 91, 0.28);
 }
 
 .secondary {
-background: #e5eeec;
+background: #e6eee7;
 
-color: #3c555b;
+color: #3e5443;
 }
 
 .secondary:hover {
-background: #d5e4e0;
+background: #d8e5da;
 }
 
 /* =========================
@@ -347,7 +346,7 @@ background:
 linear-gradient(
 180deg,
 #ffffff,
-#f7fbfa
+#f7faf6
 );
 }
 
@@ -366,7 +365,7 @@ display: block;
 
 font-size: 16px;
 
-color: #263b40;
+color: #304333;
 }
 
 /* =========================
@@ -385,11 +384,11 @@ border-radius: 15px;
 background:
 linear-gradient(
 135deg,
-#eef7f5,
-#f1f7fb
+#eef6ef,
+#f4f8f2
 );
 
-border: 1px solid #d9e9e5;
+border: 1px solid #d7e5d8;
 }
 
 .continue-area p {
@@ -420,11 +419,11 @@ font-weight: 700;
 }
 
 .message.success {
-color: #21613f;
+color: #27633b;
 
-background: #e3f5ea;
+background: #e5f4e8;
 
-border: 1px solid #c5e7d1;
+border: 1px solid #c7e6cd;
 }
 
 .message.error {
@@ -627,9 +626,9 @@ top: 0;
 
 z-index: 2;
 
-color: #3c555b;
+color: #405344;
 
-background: #f3f8f7;
+background: #f2f7f2;
 
 font-size: 14px;
 }
@@ -639,7 +638,7 @@ transition: background 0.15s;
 }
 
 tbody tr:hover {
-background: #f5faf9;
+background: #f5f9f5;
 }
 
 /* =========================
@@ -663,11 +662,11 @@ font-weight: 800;
 }
 
 .badge.ok {
-color: #21613f;
+color: #27633b;
 
-background: #e3f5ea;
+background: #e5f4e8;
 
-border: 1px solid #c5e7d1;
+border: 1px solid #c7e6cd;
 }
 
 .badge.no {
@@ -702,11 +701,11 @@ margin: 2px;
 }
 
 .details-btn {
-background: #3f7185;
+background: #477a5b;
 }
 
 .details-btn:hover {
-background: #315c6d;
+background: #356344;
 }
 
 .cancel-btn {
@@ -748,7 +747,7 @@ justify-content: center;
 
 padding: 20px;
 
-background: rgba(38, 56, 61, 0.60);
+background: rgba(38, 53, 42, 0.60);
 
 z-index: 9999;
 }
@@ -777,7 +776,7 @@ box-shadow:
 .modal-box h2 {
 margin-top: 0;
 
-color: #30464c;
+color: #38553e;
 }
 
 .detail-row {
@@ -865,18 +864,32 @@ padding: 27px 14px;
 
 .hero::before {
 top: 5px;
-right: -10px;
+
+```
+right: -15px;
+
 font-size: 55px;
-letter-spacing: 9px;
-opacity: 0.12;
+
+letter-spacing: 8px;
+
+opacity: 0.14;
+```
+
 }
 
 .hero::after {
 bottom: -15px;
+
+```
 left: -15px;
+
 font-size: 60px;
-letter-spacing: 12px;
-opacity: 0.09;
+
+letter-spacing: 10px;
+
+opacity: 0.10;
+```
+
 }
 
 .school-name,
@@ -971,12 +984,20 @@ padding: 20px;
 
 .hero::before {
 font-size: 45px;
-letter-spacing: 6px;
+
+```
+letter-spacing: 5px;
+```
+
 }
 
 .hero::after {
 font-size: 50px;
-letter-spacing: 8px;
+
+```
+letter-spacing: 7px;
+```
+
 }
 
 .grid {
