@@ -24,13 +24,11 @@ function show(id, visible) {
 
 function escapeHtml(value) {
   return String(value ?? "")
-    .replace(/[&<>'"]/g, char => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      "'": "&#39;",
-      '"': "&quot;"
-    }[char]));
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 
@@ -45,10 +43,7 @@ async function load() {
 
   if (error) {
 
-    console.error(
-      "admin_student_list:",
-      error
-    );
+    console.error("admin_student_list:", error);
 
     alert(
       "تعذر تحميل بيانات الطلاب.\n\n" +
@@ -58,7 +53,7 @@ async function load() {
     return;
   }
 
-  allRows = data || [];
+  allRows = Array.isArray(data) ? data : [];
 
   renderFilters();
   render();
@@ -88,9 +83,7 @@ function renderFilters() {
   $("classFilter").innerHTML =
     '<option value="all">كل الفصول</option>' +
     classes.map(className =>
-      `<option value="${escapeHtml(className)}">
-        ${escapeHtml(className)}
-      </option>`
+      `<option value="${escapeHtml(className)}">${escapeHtml(className)}</option>`
     ).join("");
 }
 
@@ -102,10 +95,7 @@ function renderFilters() {
 function getFilteredRows() {
 
   const q =
-    $("search")
-      .value
-      .trim()
-      .toLowerCase();
+    $("search").value.trim().toLowerCase();
 
   const status =
     $("status").value;
@@ -132,16 +122,8 @@ function getFilteredRows() {
 
     const statusMatch =
       status === "all" ||
-
-      (
-        status === "registered" &&
-        row.registered === true
-      ) ||
-
-      (
-        status === "unregistered" &&
-        row.registered === false
-      );
+      (status === "registered" && row.registered === true) ||
+      (status === "unregistered" && row.registered === false);
 
 
     const classMatch =
@@ -164,22 +146,17 @@ function getFilteredRows() {
 
 function render() {
 
-  const rows =
-    getFilteredRows();
+  const rows = getFilteredRows();
 
 
   $("total").textContent =
     allRows.length;
 
   $("registered").textContent =
-    allRows.filter(
-      row => row.registered
-    ).length;
+    allRows.filter(row => row.registered === true).length;
 
   $("unregistered").textContent =
-    allRows.filter(
-      row => !row.registered
-    ).length;
+    allRows.filter(row => row.registered === false).length;
 
 
   if (!rows.length) {
@@ -205,19 +182,12 @@ function render() {
 
       const status =
         row.registered
-
-          ? `<span class="badge ok">
-               مسجل
-             </span>`
-
-          : `<span class="badge no">
-               غير مسجل
-             </span>`;
+          ? `<span class="badge ok">مسجل</span>`
+          : `<span class="badge no">غير مسجل</span>`;
 
 
       const actions =
         row.registered
-
           ? `
             <button
               type="button"
@@ -230,570 +200,4 @@ function render() {
 
             <button
               type="button"
-              class="cancel-btn"
-              data-action="cancel"
-              data-index="${index}"
-            >
-              إلغاء التسجيل
-            </button>
-          `
-
-          : "—";
-
-
-      return `
-        <tr>
-
-          <td>
-            ${escapeHtml(
-              row.student_number
-            )}
-          </td>
-
-          <td>
-            ${escapeHtml(row.name)}
-          </td>
-
-          <td>
-            ${escapeHtml(
-              row.student_code
-            )}
-          </td>
-
-          <td>
-            ${escapeHtml(
-              row.class_name
-            )}
-          </td>
-
-          <td>
-            ${escapeHtml(
-              row.school_file_number
-            )}
-          </td>
-
-          <td>
-            ${escapeHtml(
-              row.national_id
-            )}
-          </td>
-
-          <td>
-            ${escapeHtml(
-              row.student_phone || "—"
-            )}
-          </td>
-
-          <td>
-            ${escapeHtml(
-              row.guardian_name || "—"
-            )}
-          </td>
-
-          <td>
-            ${escapeHtml(
-              row.guardian_phone || "—"
-            )}
-          </td>
-
-          <td>
-            ${escapeHtml(
-              row.address || "—"
-            )}
-          </td>
-
-          <td>
-            ${status}
-          </td>
-
-          <td>
-            ${actions}
-          </td>
-
-        </tr>
-      `;
-
-    }).join("");
-}
-
-
-/* =========================
-   تفاصيل التسجيل
-========================= */
-
-function showDetails(row) {
-
-  $("detailsContent").innerHTML = `
-
-    <div class="detail-row">
-      <span>الاسم</span>
-      <strong>
-        ${escapeHtml(row.name)}
-      </strong>
-    </div>
-
-    <div class="detail-row">
-      <span>رقم الطالب</span>
-      <strong>
-        ${escapeHtml(row.student_number)}
-      </strong>
-    </div>
-
-    <div class="detail-row">
-      <span>كود الطالب</span>
-      <strong>
-        ${escapeHtml(row.student_code)}
-      </strong>
-    </div>
-
-    <div class="detail-row">
-      <span>الفصل</span>
-      <strong>
-        ${escapeHtml(row.class_name)}
-      </strong>
-    </div>
-
-    <div class="detail-row">
-      <span>رقم الملف</span>
-      <strong>
-        ${escapeHtml(
-          row.school_file_number
-        )}
-      </strong>
-    </div>
-
-    <div class="detail-row">
-      <span>الرقم القومي</span>
-      <strong>
-        ${escapeHtml(row.national_id)}
-      </strong>
-    </div>
-
-    <div class="detail-row">
-      <span>هاتف الطالب</span>
-      <strong>
-        ${escapeHtml(
-          row.student_phone || "—"
-        )}
-      </strong>
-    </div>
-
-    <div class="detail-row">
-      <span>اسم ولي الأمر</span>
-      <strong>
-        ${escapeHtml(
-          row.guardian_name || "—"
-        )}
-      </strong>
-    </div>
-
-    <div class="detail-row">
-      <span>هاتف ولي الأمر</span>
-      <strong>
-        ${escapeHtml(
-          row.guardian_phone || "—"
-        )}
-      </strong>
-    </div>
-
-    <div class="detail-row">
-      <span>العنوان</span>
-      <strong>
-        ${escapeHtml(
-          row.address || "—"
-        )}
-      </strong>
-    </div>
-
-  `;
-
-
-  $("detailsModal")
-    .classList
-    .remove("hidden");
-}
-
-
-/* =========================
-   إلغاء التسجيل
-========================= */
-
-async function cancelRegistration(row) {
-
-  const confirmed =
-    confirm(
-      `هل تريد إلغاء تسجيل الطالب:\n\n` +
-      `${row.name}\n\n` +
-      `سيتم حذف بيانات التسجيل فقط، ` +
-      `ولن يتم حذف الطالب من قاعدة البيانات.\n\n` +
-      `بعد ذلك يستطيع الطالب التسجيل مرة أخرى.`
-    );
-
-
-  if (!confirmed) {
-    return;
-  }
-
-
-  const { data, error } =
-    await db.rpc(
-      "cancel_student_registration",
-      {
-        p_student_id: row.id
-      }
-    );
-
-
-  if (error) {
-
-    console.error(
-      "cancel_student_registration:",
-      error
-    );
-
-    alert(
-      "حدث خطأ أثناء إلغاء التسجيل:\n\n" +
-      error.message
-    );
-
-    return;
-  }
-
-
-  if (
-    !data ||
-    data.success !== true
-  ) {
-
-    alert(
-      data?.message ||
-      "لم يتم إلغاء التسجيل."
-    );
-
-    return;
-  }
-
-
-  alert(
-    "تم إلغاء التسجيل بنجاح.\n\n" +
-    "يمكن للطالب التسجيل مرة أخرى."
-  );
-
-
-  await load();
-}
-
-
-/* =========================
-   أزرار الجدول
-========================= */
-
-$("rows").addEventListener(
-  "click",
-  async event => {
-
-    const button =
-      event.target.closest("button");
-
-    if (!button) {
-      return;
-    }
-
-
-    const index =
-      Number(button.dataset.index);
-
-
-    if (
-      Number.isNaN(index) ||
-      !allRows[index]
-    ) {
-      return;
-    }
-
-
-    const row =
-      allRows[index];
-
-
-    if (
-      button.dataset.action ===
-      "details"
-    ) {
-
-      showDetails(row);
-
-      return;
-    }
-
-
-    if (
-      button.dataset.action ===
-      "cancel"
-    ) {
-
-      await cancelRegistration(row);
-
-    }
-
-  }
-);
-
-
-/* =========================
-   إغلاق التفاصيل
-========================= */
-
-$("closeDetails").addEventListener(
-  "click",
-  () => {
-
-    $("detailsModal")
-      .classList
-      .add("hidden");
-
-  }
-);
-
-
-$("detailsModal").addEventListener(
-  "click",
-  event => {
-
-    if (
-      event.target ===
-      $("detailsModal")
-    ) {
-
-      $("detailsModal")
-        .classList
-        .add("hidden");
-
-    }
-
-  }
-);
-
-
-/* =========================
-   تسجيل الدخول
-========================= */
-
-$("loginForm").addEventListener(
-  "submit",
-  async event => {
-
-    event.preventDefault();
-
-    $("loginMsg").textContent =
-      "جاري تسجيل الدخول...";
-
-
-    const email =
-      $("email")
-        .value
-        .trim();
-
-    const password =
-      $("password")
-        .value;
-
-
-    const { error } =
-      await db.auth.signInWithPassword({
-        email,
-        password
-      });
-
-
-    if (error) {
-
-      console.error(error);
-
-      $("loginMsg").textContent =
-        "بيانات الدخول غير صحيحة.";
-
-      return;
-    }
-
-
-    $("loginMsg").textContent = "";
-
-    show(
-      "loginCard",
-      false
-    );
-
-    show(
-      "dashboard",
-      true
-    );
-
-
-    await load();
-  }
-);
-
-
-/* =========================
-   خروج
-========================= */
-
-$("logoutBtn").addEventListener(
-  "click",
-  async () => {
-
-    await db.auth.signOut();
-
-    location.reload();
-
-  }
-);
-
-
-/* =========================
-   البحث والفلاتر
-========================= */
-
-$("search").addEventListener(
-  "input",
-  render
-);
-
-$("status").addEventListener(
-  "change",
-  render
-);
-
-$("classFilter").addEventListener(
-  "change",
-  render
-);
-
-
-/* =========================
-   تصدير CSV
-========================= */
-
-$("exportBtn").addEventListener(
-  "click",
-  () => {
-
-    const rows =
-      getFilteredRows();
-
-
-    const headers = [
-      "رقم الطالب",
-      "الاسم",
-      "الكود",
-      "الفصل",
-      "رقم الملف",
-      "الرقم القومي",
-      "هاتف الطالب",
-      "اسم ولي الأمر",
-      "هاتف ولي الأمر",
-      "العنوان",
-      "الحالة"
-    ];
-
-
-    const data = [
-      headers,
-
-      ...rows.map(row => [
-        row.student_number,
-        row.name,
-        row.student_code,
-        row.class_name,
-        row.school_file_number,
-        row.national_id,
-        row.student_phone || "",
-        row.guardian_name || "",
-        row.guardian_phone || "",
-        row.address || "",
-        row.registered
-          ? "مسجل"
-          : "غير مسجل"
-      ])
-    ];
-
-
-    const csv =
-      data
-        .map(row =>
-          row.map(value =>
-            `"${String(value ?? "")
-              .replace(/"/g, '""')}"`
-          ).join(",")
-        )
-        .join("\n");
-
-
-    const blob =
-      new Blob(
-        ["\ufeff" + csv],
-        {
-          type:
-            "text/csv;charset=utf-8;"
-        }
-      );
-
-
-    const url =
-      URL.createObjectURL(blob);
-
-
-    const a =
-      document.createElement("a");
-
-    a.href = url;
-
-    a.download =
-      "بيانات_الطلاب.csv";
-
-
-    document.body.appendChild(a);
-
-    a.click();
-
-    a.remove();
-
-    URL.revokeObjectURL(url);
-
-  }
-);
-
-
-/* =========================
-   فحص جلسة Admin
-========================= */
-
-(async () => {
-
-  const {
-    data: {
-      session
-    }
-  } =
-    await db.auth.getSession();
-
-
-  if (session) {
-
-    show(
-      "loginCard",
-      false
-    );
-
-    show(
-      "dashboard",
-      true
-    );
-
-    await load();
-
-  }
-
-})();
 ```
