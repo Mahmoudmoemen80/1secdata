@@ -10,15 +10,17 @@ const $ = (id) => document.getElementById(id);
 
 
 /* =========================
-   أدوات عامة
+   أدوات
 ========================= */
 
 function show(id, visible) {
   const el = $(id);
+
   if (el) {
     el.classList.toggle("hidden", !visible);
   }
 }
+
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -31,33 +33,22 @@ function escapeHtml(value) {
     }[char]));
 }
 
-function formatDate(value) {
-  if (!value) return "—";
-
-  try {
-    return new Date(value).toLocaleString("ar-EG", {
-      dateStyle: "medium",
-      timeStyle: "short"
-    });
-  } catch {
-    return value;
-  }
-}
-
 
 /* =========================
-   تحميل البيانات
+   تحميل الطلاب
 ========================= */
 
 async function load() {
 
-  const { data, error } = await db.rpc(
-    "admin_student_list"
-  );
+  const { data, error } =
+    await db.rpc("admin_student_list");
 
   if (error) {
 
-    console.error("admin_student_list error:", error);
+    console.error(
+      "admin_student_list:",
+      error
+    );
 
     alert(
       "تعذر تحميل بيانات الطلاب.\n\n" +
@@ -87,20 +78,20 @@ function renderFilters() {
         .filter(Boolean)
     )
   ].sort((a, b) =>
-    String(a).localeCompare(String(b), "ar")
+    String(a).localeCompare(
+      String(b),
+      "ar"
+    )
   );
 
-  const select = $("classFilter");
 
-  select.innerHTML =
+  $("classFilter").innerHTML =
     '<option value="all">كل الفصول</option>' +
-    classes
-      .map(className =>
-        `<option value="${escapeHtml(className)}">
-          ${escapeHtml(className)}
-        </option>`
-      )
-      .join("");
+    classes.map(className =>
+      `<option value="${escapeHtml(className)}">
+        ${escapeHtml(className)}
+      </option>`
+    ).join("");
 }
 
 
@@ -111,7 +102,8 @@ function renderFilters() {
 function getFilteredRows() {
 
   const q =
-    $("search").value
+    $("search")
+      .value
       .trim()
       .toLowerCase();
 
@@ -120,6 +112,7 @@ function getFilteredRows() {
 
   const className =
     $("classFilter").value;
+
 
   return allRows.filter(row => {
 
@@ -136,20 +129,25 @@ function getFilteredRows() {
           .includes(q)
       );
 
+
     const statusMatch =
       status === "all" ||
+
       (
         status === "registered" &&
         row.registered === true
       ) ||
+
       (
         status === "unregistered" &&
         row.registered === false
       );
 
+
     const classMatch =
       className === "all" ||
       row.class_name === className;
+
 
     return (
       searchMatch &&
@@ -166,16 +164,22 @@ function getFilteredRows() {
 
 function render() {
 
-  const rows = getFilteredRows();
+  const rows =
+    getFilteredRows();
+
 
   $("total").textContent =
     allRows.length;
 
   $("registered").textContent =
-    allRows.filter(row => row.registered).length;
+    allRows.filter(
+      row => row.registered
+    ).length;
 
   $("unregistered").textContent =
-    allRows.filter(row => !row.registered).length;
+    allRows.filter(
+      row => !row.registered
+    ).length;
 
 
   if (!rows.length) {
@@ -183,7 +187,7 @@ function render() {
     $("rows").innerHTML = `
       <tr>
         <td colspan="12" class="empty">
-          لا توجد بيانات مطابقة للبحث.
+          لا توجد بيانات مطابقة.
         </td>
       </tr>
     `;
@@ -192,100 +196,129 @@ function render() {
   }
 
 
-  $("rows").innerHTML = rows.map(row => {
+  $("rows").innerHTML =
+    rows.map(row => {
 
-    const index =
-      allRows.indexOf(row) + 1;
-
-    const statusBadge =
-      row.registered
-        ? `<span class="badge ok">مسجل</span>`
-        : `<span class="badge no">غير مسجل</span>`;
+      const index =
+        allRows.indexOf(row);
 
 
-    const actions = row.registered
-      ? `
-        <button
-          type="button"
-          class="details-btn"
-          data-action="details"
-          data-index="${index - 1}"
-        >
-          التفاصيل
-        </button>
+      const status =
+        row.registered
 
-        <button
-          type="button"
-          class="cancel-btn"
-          data-action="cancel"
-          data-index="${index - 1}"
-        >
-          إلغاء التسجيل
-        </button>
-      `
-      : "—";
+          ? `<span class="badge ok">
+               مسجل
+             </span>`
+
+          : `<span class="badge no">
+               غير مسجل
+             </span>`;
 
 
-    return `
-      <tr>
+      const actions =
+        row.registered
 
-        <td>
-          ${escapeHtml(row.student_number)}
-        </td>
+          ? `
+            <button
+              type="button"
+              class="details-btn"
+              data-action="details"
+              data-index="${index}"
+            >
+              التفاصيل
+            </button>
 
-        <td>
-          ${escapeHtml(row.name)}
-        </td>
+            <button
+              type="button"
+              class="cancel-btn"
+              data-action="cancel"
+              data-index="${index}"
+            >
+              إلغاء التسجيل
+            </button>
+          `
 
-        <td>
-          ${escapeHtml(row.student_code)}
-        </td>
+          : "—";
 
-        <td>
-          ${escapeHtml(row.class_name)}
-        </td>
 
-        <td>
-          ${escapeHtml(row.school_file_number)}
-        </td>
+      return `
+        <tr>
 
-        <td>
-          ${escapeHtml(row.national_id)}
-        </td>
+          <td>
+            ${escapeHtml(
+              row.student_number
+            )}
+          </td>
 
-        <td>
-          ${escapeHtml(row.student_phone || "—")}
-        </td>
+          <td>
+            ${escapeHtml(row.name)}
+          </td>
 
-        <td>
-          ${escapeHtml(row.guardian_name || "—")}
-        </td>
+          <td>
+            ${escapeHtml(
+              row.student_code
+            )}
+          </td>
 
-        <td>
-          ${escapeHtml(row.guardian_phone || "—")}
-        </td>
+          <td>
+            ${escapeHtml(
+              row.class_name
+            )}
+          </td>
 
-        <td>
-          ${escapeHtml(row.address || "—")}
-        </td>
+          <td>
+            ${escapeHtml(
+              row.school_file_number
+            )}
+          </td>
 
-        <td>
-          ${statusBadge}
-        </td>
+          <td>
+            ${escapeHtml(
+              row.national_id
+            )}
+          </td>
 
-        <td>
-          ${actions}
-        </td>
+          <td>
+            ${escapeHtml(
+              row.student_phone || "—"
+            )}
+          </td>
 
-      </tr>
-    `;
+          <td>
+            ${escapeHtml(
+              row.guardian_name || "—"
+            )}
+          </td>
 
-  }).join("");
+          <td>
+            ${escapeHtml(
+              row.guardian_phone || "—"
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.address || "—"
+            )}
+          </td>
+
+          <td>
+            ${status}
+          </td>
+
+          <td>
+            ${actions}
+          </td>
+
+        </tr>
+      `;
+
+    }).join("");
 }
 
 
 /* =========================
-   تفاصيل الطالب
+   تفاصيل التسجيل
 ========================= */
 
 function showDetails(row) {
@@ -294,62 +327,90 @@ function showDetails(row) {
 
     <div class="detail-row">
       <span>الاسم</span>
-      <strong>${escapeHtml(row.name)}</strong>
+      <strong>
+        ${escapeHtml(row.name)}
+      </strong>
     </div>
 
     <div class="detail-row">
       <span>رقم الطالب</span>
-      <strong>${escapeHtml(row.student_number)}</strong>
+      <strong>
+        ${escapeHtml(row.student_number)}
+      </strong>
     </div>
 
     <div class="detail-row">
       <span>كود الطالب</span>
-      <strong>${escapeHtml(row.student_code)}</strong>
+      <strong>
+        ${escapeHtml(row.student_code)}
+      </strong>
     </div>
 
     <div class="detail-row">
       <span>الفصل</span>
-      <strong>${escapeHtml(row.class_name)}</strong>
+      <strong>
+        ${escapeHtml(row.class_name)}
+      </strong>
     </div>
 
     <div class="detail-row">
       <span>رقم الملف</span>
-      <strong>${escapeHtml(row.school_file_number)}</strong>
+      <strong>
+        ${escapeHtml(
+          row.school_file_number
+        )}
+      </strong>
     </div>
 
     <div class="detail-row">
       <span>الرقم القومي</span>
-      <strong>${escapeHtml(row.national_id)}</strong>
+      <strong>
+        ${escapeHtml(row.national_id)}
+      </strong>
     </div>
 
     <div class="detail-row">
       <span>هاتف الطالب</span>
-      <strong>${escapeHtml(row.student_phone || "—")}</strong>
+      <strong>
+        ${escapeHtml(
+          row.student_phone || "—"
+        )}
+      </strong>
     </div>
 
     <div class="detail-row">
       <span>اسم ولي الأمر</span>
-      <strong>${escapeHtml(row.guardian_name || "—")}</strong>
+      <strong>
+        ${escapeHtml(
+          row.guardian_name || "—"
+        )}
+      </strong>
     </div>
 
     <div class="detail-row">
       <span>هاتف ولي الأمر</span>
-      <strong>${escapeHtml(row.guardian_phone || "—")}</strong>
+      <strong>
+        ${escapeHtml(
+          row.guardian_phone || "—"
+        )}
+      </strong>
     </div>
 
     <div class="detail-row">
       <span>العنوان</span>
-      <strong>${escapeHtml(row.address || "—")}</strong>
-    </div>
-
-    <div class="detail-row">
-      <span>تاريخ التسجيل</span>
-      <strong>${escapeHtml(formatDate(row.registered_at))}</strong>
+      <strong>
+        ${escapeHtml(
+          row.address || "—"
+        )}
+      </strong>
     </div>
 
   `;
 
-  $("detailsModal").classList.remove("hidden");
+
+  $("detailsModal")
+    .classList
+    .remove("hidden");
 }
 
 
@@ -359,15 +420,15 @@ function showDetails(row) {
 
 async function cancelRegistration(row) {
 
-  const studentName =
-    row.name || "هذا الطالب";
+  const confirmed =
+    confirm(
+      `هل تريد إلغاء تسجيل الطالب:\n\n` +
+      `${row.name}\n\n` +
+      `سيتم حذف بيانات التسجيل فقط، ` +
+      `ولن يتم حذف الطالب من قاعدة البيانات.\n\n` +
+      `بعد ذلك يستطيع الطالب التسجيل مرة أخرى.`
+    );
 
-
-  const confirmed = confirm(
-    `هل تريد إلغاء تسجيل الطالب:\n\n${studentName}\n\n` +
-    `سيتم حذف بيانات التسجيل فقط، وسيظل الطالب موجودًا في قاعدة البيانات، ` +
-    `وبالتالي يستطيع التسجيل مرة أخرى.`
-  );
 
   if (!confirmed) {
     return;
@@ -386,7 +447,7 @@ async function cancelRegistration(row) {
   if (error) {
 
     console.error(
-      "cancel_student_registration error:",
+      "cancel_student_registration:",
       error
     );
 
@@ -399,7 +460,10 @@ async function cancelRegistration(row) {
   }
 
 
-  if (!data || data.success !== true) {
+  if (
+    !data ||
+    data.success !== true
+  ) {
 
     alert(
       data?.message ||
@@ -412,7 +476,7 @@ async function cancelRegistration(row) {
 
   alert(
     "تم إلغاء التسجيل بنجاح.\n\n" +
-    "يمكن للطالب الآن التسجيل مرة أخرى."
+    "يمكن للطالب التسجيل مرة أخرى."
   );
 
 
@@ -426,15 +490,19 @@ async function cancelRegistration(row) {
 
 $("rows").addEventListener(
   "click",
-  async (event) => {
+  async event => {
 
     const button =
       event.target.closest("button");
 
-    if (!button) return;
+    if (!button) {
+      return;
+    }
+
 
     const index =
       Number(button.dataset.index);
+
 
     if (
       Number.isNaN(index) ||
@@ -442,6 +510,7 @@ $("rows").addEventListener(
     ) {
       return;
     }
+
 
     const row =
       allRows[index];
@@ -478,8 +547,11 @@ $("rows").addEventListener(
 $("closeDetails").addEventListener(
   "click",
   () => {
+
     $("detailsModal")
-      .classList.add("hidden");
+      .classList
+      .add("hidden");
+
   }
 );
 
@@ -492,8 +564,11 @@ $("detailsModal").addEventListener(
       event.target ===
       $("detailsModal")
     ) {
+
       $("detailsModal")
-        .classList.add("hidden");
+        .classList
+        .add("hidden");
+
     }
 
   }
@@ -515,10 +590,13 @@ $("loginForm").addEventListener(
 
 
     const email =
-      $("email").value.trim();
+      $("email")
+        .value
+        .trim();
 
     const password =
-      $("password").value;
+      $("password")
+        .value;
 
 
     const { error } =
@@ -533,7 +611,7 @@ $("loginForm").addEventListener(
       console.error(error);
 
       $("loginMsg").textContent =
-        "بيانات الدخول غير صحيحة أو الحساب غير مصرح له.";
+        "بيانات الدخول غير صحيحة.";
 
       return;
     }
@@ -541,8 +619,16 @@ $("loginForm").addEventListener(
 
     $("loginMsg").textContent = "";
 
-    show("loginCard", false);
-    show("dashboard", true);
+    show(
+      "loginCard",
+      false
+    );
+
+    show(
+      "dashboard",
+      true
+    );
+
 
     await load();
   }
@@ -550,7 +636,7 @@ $("loginForm").addEventListener(
 
 
 /* =========================
-   تسجيل الخروج
+   خروج
 ========================= */
 
 $("logoutBtn").addEventListener(
@@ -586,7 +672,7 @@ $("classFilter").addEventListener(
 
 
 /* =========================
-   تصدير CSV / Excel
+   تصدير CSV
 ========================= */
 
 $("exportBtn").addEventListener(
@@ -657,12 +743,15 @@ $("exportBtn").addEventListener(
     const url =
       URL.createObjectURL(blob);
 
+
     const a =
       document.createElement("a");
 
     a.href = url;
+
     a.download =
       "بيانات_الطلاب.csv";
+
 
     document.body.appendChild(a);
 
@@ -677,7 +766,7 @@ $("exportBtn").addEventListener(
 
 
 /* =========================
-   التحقق من الجلسة
+   فحص جلسة Admin
 ========================= */
 
 (async () => {
@@ -692,8 +781,15 @@ $("exportBtn").addEventListener(
 
   if (session) {
 
-    show("loginCard", false);
-    show("dashboard", true);
+    show(
+      "loginCard",
+      false
+    );
+
+    show(
+      "dashboard",
+      true
+    );
 
     await load();
 
