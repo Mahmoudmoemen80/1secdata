@@ -118,26 +118,37 @@ function render() {
           ? '<span class="badge ok">مسجل</span>'
           : '<span class="badge no">غير مسجل</span>';
 
-      const actions =
-        row.registered
-          ? `
-            <button
-              type="button"
-              class="details-btn"
-              data-action="details"
-              data-index="${index}">
-              التفاصيل
-            </button>
+      const actions = `
+        <button
+          type="button"
+          class="edit-btn"
+          data-action="edit"
+          data-index="${index}">
+          ✏️ تعديل
+        </button>
 
-            <button
-              type="button"
-              class="cancel-btn"
-              data-action="cancel"
-              data-index="${index}">
-              إلغاء التسجيل
-            </button>
-          `
-          : "—";
+        <button
+          type="button"
+          class="details-btn"
+          data-action="details"
+          data-index="${index}">
+          التفاصيل
+        </button>
+
+        ${
+          row.registered
+            ? `
+              <button
+                type="button"
+                class="cancel-btn"
+                data-action="cancel"
+                data-index="${index}">
+                إلغاء التسجيل
+              </button>
+            `
+            : ""
+        }
+      `;
 
       return `
         <tr>
@@ -214,6 +225,103 @@ function showDetails(row) {
   $("detailsModal").classList.remove("hidden");
 }
 
+
+function openEditModal(row) {
+  $("editId").value = row.id ?? "";
+  $("editStudentNumber").value = row.student_number ?? "";
+  $("editName").value = row.name ?? "";
+  $("editNationalId").value = row.national_id ?? "";
+  $("editStudentCode").value = row.student_code ?? "";
+  $("editGender").value = row.gender ?? "";
+  $("editClassName").value = row.class_name ?? "";
+  $("editSchoolFile").value = row.school_file_number ?? "";
+  $("editStudentPhone").value = row.student_phone ?? "";
+  $("editGuardianName").value = row.guardian_name ?? "";
+  $("editGuardianPhone").value = row.guardian_phone ?? "";
+  $("editAddress").value = row.address ?? "";
+
+  $("editMsg").textContent = "";
+  $("editMsg").className = "edit-msg";
+  $("saveEditBtn").disabled = false;
+
+  $("editModal").classList.remove("hidden");
+}
+
+function closeEditModal() {
+  $("editModal").classList.add("hidden");
+  $("editMsg").textContent = "";
+  $("editMsg").className = "edit-msg";
+}
+
+async function saveStudentEdit() {
+  const id = Number($("editId").value);
+
+  const studentNumber = Number($("editStudentNumber").value);
+  const name = $("editName").value.trim();
+  const nationalId = $("editNationalId").value.trim();
+
+  if (!id || !studentNumber || !name || !nationalId) {
+    $("editMsg").textContent =
+      "من فضلك أكمل رقم الطالب والاسم والرقم القومي.";
+    $("editMsg").className = "edit-msg error";
+    return;
+  }
+
+  if (!/^\d{14}$/.test(nationalId)) {
+    $("editMsg").textContent =
+      "الرقم القومي يجب أن يتكون من 14 رقمًا.";
+    $("editMsg").className = "edit-msg error";
+    return;
+  }
+
+  $("saveEditBtn").disabled = true;
+  $("editMsg").textContent = "جاري حفظ التعديلات...";
+  $("editMsg").className = "edit-msg";
+
+  const { data, error } = await db.rpc("admin_update_student", {
+    p_student_id: id,
+    p_student_number: studentNumber,
+    p_name: name,
+    p_national_id: nationalId,
+    p_student_code: $("editStudentCode").value.trim(),
+    p_gender: $("editGender").value.trim(),
+    p_class_name: $("editClassName").value.trim(),
+    p_school_file_number: $("editSchoolFile").value.trim(),
+    p_student_phone: $("editStudentPhone").value.trim(),
+    p_guardian_name: $("editGuardianName").value.trim(),
+    p_guardian_phone: $("editGuardianPhone").value.trim(),
+    p_address: $("editAddress").value.trim()
+  });
+
+  if (error) {
+    console.error("admin_update_student:", error);
+
+    $("editMsg").textContent =
+      "حدث خطأ أثناء الحفظ: " + error.message;
+    $("editMsg").className = "edit-msg error";
+    $("saveEditBtn").disabled = false;
+    return;
+  }
+
+  if (!data || data.success !== true) {
+    $("editMsg").textContent =
+      data?.message || "لم يتم حفظ التعديلات.";
+    $("editMsg").className = "edit-msg error";
+    $("saveEditBtn").disabled = false;
+    return;
+  }
+
+  $("editMsg").textContent =
+    "تم حفظ بيانات الطالب بنجاح.";
+  $("editMsg").className = "edit-msg success";
+
+  await load();
+
+  setTimeout(() => {
+    closeEditModal();
+  }, 500);
+}
+
 async function cancelRegistration(row) {
 
   const confirmed = confirm(
@@ -276,6 +384,11 @@ $("rows").addEventListener("click", async event => {
 
   const row = allRows[index];
 
+  if (button.dataset.action === "edit") {
+    openEditModal(row);
+    return;
+  }
+
   if (button.dataset.action === "details") {
     showDetails(row);
     return;
@@ -283,6 +396,19 @@ $("rows").addEventListener("click", async event => {
 
   if (button.dataset.action === "cancel") {
     await cancelRegistration(row);
+  }
+});
+
+$("editForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  await saveStudentEdit();
+});
+
+$("cancelEditBtn").addEventListener("click", closeEditModal);
+
+$("editModal").addEventListener("click", event => {
+  if (event.target === $("editModal")) {
+    closeEditModal();
   }
 });
 
