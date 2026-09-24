@@ -153,6 +153,10 @@ if (!storedStudent) {
         e.preventDefault();
 
 
+        const studySystem =
+          $("studySystem").value.trim();
+
+
         const studentPhone =
           normalizePhone(
             $("studentPhone").value
@@ -175,6 +179,20 @@ if (!storedStudent) {
           $("address")
             .value
             .trim();
+
+
+        // ===============================
+        // نظام الدراسة
+        // ===============================
+
+        if (!studySystem) {
+
+          msg("من فضلك اختر نظام الدراسة.");
+
+          $("studySystem").focus();
+
+          return;
+        }
 
 
         // ===============================
@@ -236,25 +254,6 @@ if (!storedStudent) {
 
 
         // ===============================
-        // منع تساوي الرقمين
-        // ===============================
-
-        if (
-          studentPhone ===
-          guardianPhone
-        ) {
-
-          msg(
-            "رقم الطالب ورقم ولي الأمر يجب أن يكونا مختلفين."
-          );
-
-          $("guardianPhone").focus();
-
-          return;
-        }
-
-
-        // ===============================
         // العنوان
         // ===============================
 
@@ -295,6 +294,9 @@ if (!storedStudent) {
 
                 p_student_phone:
                   studentPhone,
+
+                p_study_system:
+                  studySystem,
 
                 p_guardian_name:
                   guardianName,
