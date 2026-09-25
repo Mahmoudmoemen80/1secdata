@@ -1,3 +1,4 @@
+```javascript
 const db = window.supabase.createClient(
   APP_CONFIG.SUPABASE_URL,
   APP_CONFIG.SUPABASE_ANON_KEY
@@ -59,21 +60,31 @@ function isValidEgyptianPhone(value) {
   );
 }
 
+
 // ===============================
 // الاسم - حروف فقط
 // ===============================
 
 function normalizeName(value) {
+
   return String(value || '')
     .replace(/[^A-Za-z؀-ۿ\s]/g, '')
     .replace(/\s+/g, ' ')
     .trimStart();
 }
 
+
 ['guardianName'].forEach(id => {
+
   $(id).addEventListener('input', e => {
-    e.target.value = normalizeName(e.target.value);
+
+    e.target.value =
+      normalizeName(
+        e.target.value
+      );
+
   });
+
 });
 
 
@@ -94,7 +105,6 @@ if (!storedStudent) {
 
 } else {
 
-
   let currentStudent;
 
 
@@ -113,6 +123,7 @@ if (!storedStudent) {
 
     window.location.href =
       "index.html";
+
   }
 
 
@@ -134,6 +145,74 @@ if (!storedStudent) {
 
   $("sNational").textContent =
     currentStudent.national_id || "";
+
+
+  // ===============================
+  // نظام الدراسة
+  // ===============================
+
+  $("studySystem").addEventListener(
+    "change",
+    () => {
+
+      const studySystem =
+        $("studySystem").value.trim();
+
+
+      // =============================
+      // ثانوية عامة غير متاحة
+      // =============================
+
+      if (
+        studySystem === "ثانوية عامة"
+      ) {
+
+        msg(
+          "عفواً، هذا النظام غير متاح بمدرستك."
+        );
+
+        $("saveBtn").disabled =
+          true;
+
+        return;
+      }
+
+
+      // =============================
+      // اختيار بكالوريا
+      // =============================
+
+      if (
+        studySystem === "بكالوريا"
+      ) {
+
+        msg(
+          "تم اختيار نظام البكالوريا.",
+          true
+        );
+
+        $("saveBtn").disabled =
+          false;
+
+        return;
+      }
+
+
+      // =============================
+      // لم يتم الاختيار
+      // =============================
+
+      $("saveBtn").disabled =
+        false;
+
+      $("message").textContent =
+        "";
+
+      $("message").className =
+        "";
+
+    }
+  );
 
 
   // ===============================
@@ -174,6 +253,25 @@ if (!storedStudent) {
           $("studySystem").value.trim();
 
 
+        // ===============================
+        // منع ثانوية عامة قبل أي شيء
+        // ===============================
+
+        if (
+          studySystem === "ثانوية عامة"
+        ) {
+
+          msg(
+            "عفواً، هذا النظام غير متاح بمدرستك."
+          );
+
+          $("saveBtn").disabled =
+            true;
+
+          return;
+        }
+
+
         const studentPhone =
           normalizePhone(
             $("studentPhone").value
@@ -181,7 +279,9 @@ if (!storedStudent) {
 
 
         const guardianName =
-          normalizeName($("guardianName").value);
+          normalizeName(
+            $("guardianName").value
+          );
 
 
         const guardianPhone =
@@ -202,7 +302,9 @@ if (!storedStudent) {
 
         if (!studySystem) {
 
-          msg("من فضلك اختر نظام الدراسة.");
+          msg(
+            "من فضلك اختر نظام الدراسة."
+          );
 
           $("studySystem").focus();
 
@@ -236,7 +338,9 @@ if (!storedStudent) {
 
         if (
           guardianName.length < 3 ||
-          !/^[A-Za-z؀-ۿ]+(?:\s+[A-Za-z؀-ۿ]+)*$/.test(guardianName)
+          !/^[A-Za-z؀-ۿ]+(?:\s+[A-Za-z؀-ۿ]+)*$/.test(
+            guardianName
+          )
         ) {
 
           msg(
@@ -406,3 +510,4 @@ if (!storedStudent) {
     );
 
 }
+```
