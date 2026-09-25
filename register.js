@@ -337,7 +337,35 @@ const studentName =
   normalizeName(
     currentStudent.name
   );
+function normalizeNameForCompare(value) {
+  return String(value || "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .replace(/[أإآ]/g, "ا")
+    .replace(/ى/g, "ي")
+    .replace(/ؤ/g, "و")
+    .replace(/ئ/g, "ي")
+    .replace(/ة/g, "ه")
+    .toLowerCase();
+}
 
+const studentWords =
+  normalizeNameForCompare(currentStudent.name).split(" ");
+
+const guardianWords =
+  normalizeNameForCompare(guardianName).split(" ");
+
+const sameNameParts =
+  guardianWords.length > 0 &&
+  guardianWords.every(word =>
+    studentWords.includes(word)
+  );
+
+if (sameNameParts) {
+  msg("من فضلك اكتب اسم ولي الأمر وليس اسم الطالب.");
+  $("guardianName").focus();
+  return;
+}
         // ===============================
         // هاتف ولي الأمر
         // ===============================
