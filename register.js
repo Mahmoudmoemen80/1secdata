@@ -230,24 +230,77 @@ if (!storedStudent) {
         }
 
 
-        // ===============================
-        // اسم ولي الأمر
-        // ===============================
+// ===============================
+// اسم ولي الأمر
+// ===============================
 
-        if (
-          guardianName.length < 3 ||
-          !/^[A-Za-z؀-ۿ]+(?:\s+[A-Za-z؀-ۿ]+)*$/.test(guardianName)
-        ) {
+if (
+  guardianName.length < 3 ||
+  !/^[A-Za-z؀-ۿ]+(?:\s+[A-Za-z؀-ۿ]+)*$/.test(guardianName)
+) {
 
-          msg(
-            "اسم ولي الأمر يجب أن يحتوي على حروف فقط."
-          );
+  msg(
+    "اسم ولي الأمر يجب أن يحتوي على حروف فقط."
+  );
 
-          $("guardianName").focus();
+  $("guardianName").focus();
 
-          return;
-        }
+  return;
+}
 
+
+// ===============================
+// منع الطالب من تسجيل نفسه كولي أمر
+// ===============================
+
+function normalizeNameForCompare(value) {
+
+  return String(value || "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .replace(/[أإآٱ]/g, "ا")
+    .replace(/ى/g, "ي")
+    .replace(/ؤ/g, "و")
+    .replace(/ئ/g, "ي")
+    .replace(/ة/g, "ه")
+    .toLowerCase();
+}
+
+
+const studentWords =
+  normalizeNameForCompare(
+    currentStudent.name
+  )
+  .split(" ")
+  .filter(Boolean);
+
+
+const guardianWords =
+  normalizeNameForCompare(
+    guardianName
+  )
+  .split(" ")
+  .filter(Boolean);
+
+
+// إذا كانت بداية اسم ولي الأمر
+// مطابقة لبداية اسم الطالب
+if (
+  guardianWords.length > 0 &&
+  guardianWords.every(
+    (word, index) =>
+      studentWords[index] === word
+  )
+) {
+
+  msg(
+    "❌ غير مسموح: اسم ولي الأمر لا يمكن أن يكون مطابقًا لاسم الطالب."
+  );
+
+  $("guardianName").focus();
+
+  return;
+}
 
         // ===============================
         // هاتف ولي الأمر
