@@ -8,14 +8,12 @@ const $ = (id) =>
 
 
 // ===============================
-// الرسائل العامة
+// الرسائل
 // ===============================
 
 function msg(text, ok = false) {
 
   const el = $("message");
-
-  if (!el) return;
 
   el.textContent = text;
 
@@ -23,26 +21,6 @@ function msg(text, ok = false) {
     ok
       ? "message success"
       : "message error";
-}
-
-
-// ===============================
-// رسالة نظام الدراسة
-// ===============================
-
-function studySystemMsg(text, type = "error") {
-
-  const el =
-    $("studySystemMessage");
-
-  if (!el) return;
-
-  el.textContent = text;
-
-  el.className =
-    type === "success"
-      ? "success"
-      : "error";
 }
 
 
@@ -81,45 +59,26 @@ function isValidEgyptianPhone(value) {
   );
 }
 
-
 // ===============================
 // الاسم - حروف فقط
 // ===============================
 
 function normalizeName(value) {
-
-  return String(value || "")
-    .replace(/[^A-Za-z؀-ۿ\s]/g, "")
-    .replace(/\s+/g, " ")
+  return String(value || '')
+    .replace(/[^A-Za-z؀-ۿ\s]/g, '')
+    .replace(/\s+/g, ' ')
     .trimStart();
 }
 
-
-["guardianName"].forEach(id => {
-
-  const el = $(id);
-
-  if (el) {
-
-    el.addEventListener(
-      "input",
-      e => {
-
-        e.target.value =
-          normalizeName(
-            e.target.value
-          );
-
-      }
-    );
-
-  }
-
+['guardianName'].forEach(id => {
+  $(id).addEventListener('input', e => {
+    e.target.value = normalizeName(e.target.value);
+  });
 });
 
 
 // ===============================
-// بيانات الطالب
+// الحصول على بيانات الطالب
 // ===============================
 
 const storedStudent =
@@ -135,6 +94,7 @@ if (!storedStudent) {
 
 } else {
 
+
   let currentStudent;
 
 
@@ -147,265 +107,302 @@ if (!storedStudent) {
 
   } catch (err) {
 
-    console.error(
-      "خطأ في قراءة بيانات الطالب:",
-      err
+    sessionStorage.removeItem(
+      "currentStudent"
     );
 
-    msg(
-      "تعذر قراءة بيانات الطالب. برجاء العودة والبحث عن الطالب مرة أخرى."
-    );
-
-    // مهم:
-    // لا نحذف currentStudent من sessionStorage
-    // حتى لا تضيع بيانات الطالب.
-
+    window.location.href =
+      "index.html";
   }
 
 
-  if (currentStudent) {
+  // ===============================
+  // عرض بيانات الطالب
+  // ===============================
+
+  $("sName").textContent =
+    currentStudent.name || "";
+
+  $("sCode").textContent =
+    currentStudent.student_code || "";
+
+  $("sClass").textContent =
+    currentStudent.class_name || "";
+
+  $("sFile").textContent =
+    currentStudent.school_file_number || "";
+
+  $("sNational").textContent =
+    currentStudent.national_id || "";
 
 
-    // ===============================
-    // عرض بيانات الطالب
-    // ===============================
+  // ===============================
+  // الهاتف
+  // ===============================
 
-    $("sName").textContent =
-      currentStudent.name || "";
+  ["studentPhone", "guardianPhone"]
+    .forEach(id => {
 
-    $("sCode").textContent =
-      currentStudent.student_code || "";
+      $(id).addEventListener(
+        "input",
+        e => {
 
-    $("sClass").textContent =
-      currentStudent.class_name || "";
+          e.target.value =
+            normalizePhone(
+              e.target.value
+            );
 
-    $("sFile").textContent =
-      currentStudent.school_file_number || "";
-
-    $("sNational").textContent =
-      currentStudent.national_id || "";
-
-
-    // ===============================
-    // نظام الدراسة
-    // ===============================
-
-    $("studySystem").addEventListener(
-      "change",
-      function () {
-
-        const value =
-          this.value.trim();
-
-
-        // --------------------------------
-        // ثانوية عامة
-        // --------------------------------
-
-        if (
-          value === "ثانوية عامة"
-        ) {
-
-          studySystemMsg(
-            "عفواً، هذا النظام غير متاح بمدرستك.",
-            "error"
-          );
-
-          $("saveBtn").disabled =
-            true;
-
-          return;
         }
-
-
-        // --------------------------------
-        // بكالوريا
-        // --------------------------------
-
-        if (
-          value === "بكالوريا"
-        ) {
-
-          studySystemMsg(
-            "تم اختيار نظام البكالوريا.",
-            "success"
-          );
-
-          $("saveBtn").disabled =
-            false;
-
-          return;
-        }
-
-
-        // --------------------------------
-        // لم يتم الاختيار
-        // --------------------------------
-
-        const el =
-          $("studySystemMessage");
-
-        el.textContent = "";
-
-        el.className = "";
-
-        $("saveBtn").disabled =
-          false;
-
-      }
-    );
-
-
-    // ===============================
-    // الهاتف
-    // ===============================
-
-    [
-      "studentPhone",
-      "guardianPhone"
-    ].forEach(id => {
-
-      const el = $(id);
-
-      if (el) {
-
-        el.addEventListener(
-          "input",
-          e => {
-
-            e.target.value =
-              normalizePhone(
-                e.target.value
-              );
-
-          }
-        );
-
-      }
+      );
 
     });
 
 
-    // ===============================
-    // تسجيل البيانات
-    // ===============================
+  // ===============================
+  // تسجيل البيانات
+  // ===============================
 
-    $("registerForm")
-      .addEventListener(
-        "submit",
-        async e => {
+  $("registerForm")
+    .addEventListener(
+      "submit",
+      async e => {
 
-          e.preventDefault();
-
-
-          // ===============================
-          // نظام الدراسة
-          // ===============================
-
-          const studySystem =
-            $("studySystem")
-              .value
-              .trim();
+        e.preventDefault();
 
 
-          if (!studySystem) {
+        const studySystem =
+          $("studySystem").value.trim();
 
-            msg(
-              "من فضلك اختر نظام الدراسة."
+
+        const studentPhone =
+          normalizePhone(
+            $("studentPhone").value
+          );
+
+
+        const guardianName =
+          normalizeName($("guardianName").value);
+
+
+        const guardianPhone =
+          normalizePhone(
+            $("guardianPhone").value
+          );
+
+
+        const address =
+          $("address")
+            .value
+            .trim();
+
+
+        // ===============================
+        // نظام الدراسة
+        // ===============================
+
+        if (!studySystem) {
+
+          msg("من فضلك اختر نظام الدراسة.");
+
+          $("studySystem").focus();
+
+          return;
+        }
+
+
+        // ===============================
+        // التحقق من رقم الطالب
+        // ===============================
+
+        if (
+          !isValidEgyptianPhone(
+            studentPhone
+          )
+        ) {
+
+          msg(
+            "رقم تليفون الطالب يجب أن يكون 11 رقمًا ويبدأ بـ 010 أو 011 أو 012 أو 015."
+          );
+
+          $("studentPhone").focus();
+
+          return;
+        }
+
+
+        // ===============================
+        // اسم ولي الأمر
+        // ===============================
+
+        if (
+          guardianName.length < 3 ||
+          !/^[A-Za-z؀-ۿ]+(?:\s+[A-Za-z؀-ۿ]+)*$/.test(guardianName)
+        ) {
+
+          msg(
+            "اسم ولي الأمر يجب أن يحتوي على حروف فقط."
+          );
+
+          $("guardianName").focus();
+
+          return;
+        }
+
+
+        // ===============================
+        // هاتف ولي الأمر
+        // ===============================
+
+        if (
+          !isValidEgyptianPhone(
+            guardianPhone
+          )
+        ) {
+
+          msg(
+            "رقم ولي الأمر يجب أن يكون 11 رقمًا ويبدأ بـ 010 أو 011 أو 012 أو 015."
+          );
+
+          $("guardianPhone").focus();
+
+          return;
+        }
+
+
+        // ===============================
+        // العنوان
+        // ===============================
+
+        if (
+          address.length < 5
+        ) {
+
+          msg(
+            "من فضلك اكتب العنوان بالتفصيل."
+          );
+
+          $("address").focus();
+
+          return;
+        }
+
+
+        // ===============================
+        // بدء التسجيل
+        // ===============================
+
+        $("saveBtn").disabled =
+          true;
+
+        $("saveBtn").textContent =
+          "جاري التسجيل...";
+
+
+        try {
+
+          const { data, error } =
+            await db.rpc(
+              "register_student",
+              {
+
+                p_student_id:
+                  currentStudent.id,
+
+                p_student_phone:
+                  studentPhone,
+
+                p_study_system:
+                  studySystem,
+
+                p_guardian_name:
+                  guardianName,
+
+                p_guardian_phone:
+                  guardianPhone,
+
+                p_address:
+                  address
+
+              }
             );
 
-            $("studySystem").focus();
+
+          console.log(
+            "Registration result:",
+            {
+              data,
+              error
+            }
+          );
+
+
+          if (error) {
+
+            console.error(
+              "Registration error:",
+              error
+            );
+
+            msg(
+              "تعذر تسجيل البيانات. يرجى المحاولة مرة أخرى."
+            );
 
             return;
           }
 
+
+          // ===============================
+          // فحص نتيجة الدالة
+          // ===============================
 
           if (
-            studySystem === "ثانوية عامة"
+            data &&
+            data.success === false
           ) {
 
-            studySystemMsg(
-              "عفواً، هذا النظام غير متاح بمدرستك.",
-              "error"
-            );
-
-            $("saveBtn").disabled =
-              true;
-
-            return;
-          }
-
-
-          // ===============================
-          // الهاتف
-          // ===============================
-
-          const studentPhone =
-            normalizePhone(
-              $("studentPhone").value
-            );
-
-
-          // ===============================
-          // اسم ولي الأمر
-          // ===============================
-
-          const guardianName =
-            normalizeName(
-              $("guardianName").value
-            );
-
-
-          const studentName =
-            normalizeName(
-              currentStudent.name
-            );
-
-
-          function normalizeNameForCompare(value) {
-
-            return String(value || "")
-              .trim()
-              .replace(/\s+/g, " ")
-              .replace(/[أإآ]/g, "ا")
-              .replace(/ى/g, "ي")
-              .replace(/ؤ/g, "و")
-              .replace(/ئ/g, "ي")
-              .replace(/ة/g, "ه")
-              .toLowerCase();
-
-          }
-
-
-          const studentWords =
-            normalizeNameForCompare(
-              currentStudent.name
-            ).split(" ");
-
-
-          const guardianWords =
-            normalizeNameForCompare(
-              guardianName
-            ).split(" ");
-
-
-          const sameNameParts =
-            guardianWords.length > 0 &&
-            guardianWords.every(word =>
-              studentWords.includes(word)
-            );
-
-
-          if (sameNameParts) {
-
             msg(
-              "من فضلك اكتب اسم ولي الأمر وليس اسم الطالب."
+              data.message ||
+              "تعذر تسجيل البيانات."
             );
-
-            $("guardianName").focus();
 
             return;
           }
 
 
-          //
+          // ===============================
+          // نجاح التسجيل
+          // ===============================
+
+          sessionStorage.removeItem(
+            "currentStudent"
+          );
+
+
+          window.location.href =
+            "success.html";
+
+        } catch (err) {
+
+          console.error(
+            "Unexpected registration error:",
+            err
+          );
+
+          msg(
+            "حدث خطأ أثناء التسجيل."
+          );
+
+        } finally {
+
+          $("saveBtn").disabled =
+            false;
+
+          $("saveBtn").textContent =
+            "تسجيل البيانات";
+
+        }
+
+      }
+    );
+
+}
