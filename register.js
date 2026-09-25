@@ -344,6 +344,11 @@ if (!storedStudent) {
             $("guardianPhone").value
           );
 
+        if (guardianName === currentStudent.name) {
+  msg("من فضلك اكتب اسم ولي الأمر وليس اسم الطالب.");
+  $("guardianName").focus();
+  return;
+}
 
         // ===============================
         // العنوان
