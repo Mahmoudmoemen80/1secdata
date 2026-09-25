@@ -9,12 +9,14 @@ const $ = (id) =>
 
 
 // ===============================
-// الرسائل
+// الرسائل العامة
 // ===============================
 
 function msg(text, ok = false) {
 
   const el = $("message");
+
+  if (!el) return;
 
   el.textContent = text;
 
@@ -22,6 +24,26 @@ function msg(text, ok = false) {
     ok
       ? "message success"
       : "message error";
+}
+
+
+// ===============================
+// رسالة نظام الدراسة
+// ===============================
+
+function studySystemMsg(text, type = "error") {
+
+  const el =
+    $("studySystemMessage");
+
+  if (!el) return;
+
+  el.textContent = text;
+
+  el.className =
+    type === "success"
+      ? "success"
+      : "error";
 }
 
 
@@ -67,29 +89,32 @@ function isValidEgyptianPhone(value) {
 
 function normalizeName(value) {
 
-  return String(value || '')
-    .replace(/[^A-Za-z؀-ۿ\s]/g, '')
-    .replace(/\s+/g, ' ')
+  return String(value || "")
+    .replace(/[^A-Za-z؀-ۿ\s]/g, "")
+    .replace(/\s+/g, " ")
     .trimStart();
 }
 
 
-['guardianName'].forEach(id => {
+["guardianName"].forEach(id => {
 
-  $(id).addEventListener('input', e => {
+  $(id).addEventListener(
+    "input",
+    e => {
 
-    e.target.value =
-      normalizeName(
-        e.target.value
-      );
+      e.target.value =
+        normalizeName(
+          e.target.value
+        );
 
-  });
+    }
+  );
 
 });
 
 
 // ===============================
-// الحصول على بيانات الطالب
+// بيانات الطالب
 // ===============================
 
 const storedStudent =
@@ -153,22 +178,23 @@ if (!storedStudent) {
 
   $("studySystem").addEventListener(
     "change",
-    () => {
+    function () {
 
-      const studySystem =
-        $("studySystem").value.trim();
+      const value =
+        this.value.trim();
 
 
-      // =============================
-      // ثانوية عامة غير متاحة
-      // =============================
+      // --------------------------------
+      // ثانوية عامة
+      // --------------------------------
 
       if (
-        studySystem === "ثانوية عامة"
+        value === "ثانوية عامة"
       ) {
 
-        msg(
-          "عفواً، هذا النظام غير متاح بمدرستك."
+        studySystemMsg(
+          "عفواً، هذا النظام غير متاح بمدرستك.",
+          "error"
         );
 
         $("saveBtn").disabled =
@@ -178,17 +204,17 @@ if (!storedStudent) {
       }
 
 
-      // =============================
-      // اختيار بكالوريا
-      // =============================
+      // --------------------------------
+      // بكالوريا
+      // --------------------------------
 
       if (
-        studySystem === "بكالوريا"
+        value === "بكالوريا"
       ) {
 
-        msg(
+        studySystemMsg(
           "تم اختيار نظام البكالوريا.",
-          true
+          "success"
         );
 
         $("saveBtn").disabled =
@@ -198,18 +224,19 @@ if (!storedStudent) {
       }
 
 
-      // =============================
+      // --------------------------------
       // لم يتم الاختيار
-      // =============================
+      // --------------------------------
+
+      const el =
+        $("studySystemMessage");
+
+      el.textContent = "";
+
+      el.className = "";
 
       $("saveBtn").disabled =
         false;
-
-      $("message").textContent =
-        "";
-
-      $("message").className =
-        "";
 
     }
   );
@@ -219,22 +246,24 @@ if (!storedStudent) {
   // الهاتف
   // ===============================
 
-  ["studentPhone", "guardianPhone"]
-    .forEach(id => {
+  [
+    "studentPhone",
+    "guardianPhone"
+  ].forEach(id => {
 
-      $(id).addEventListener(
-        "input",
-        e => {
+    $(id).addEventListener(
+      "input",
+      e => {
 
-          e.target.value =
-            normalizePhone(
-              e.target.value
-            );
+        e.target.value =
+          normalizePhone(
+            e.target.value
+          );
 
-        }
-      );
+      }
+    );
 
-    });
+  });
 
 
   // ===============================
@@ -249,56 +278,15 @@ if (!storedStudent) {
         e.preventDefault();
 
 
-        const studySystem =
-          $("studySystem").value.trim();
-
-
-        // ===============================
-        // منع ثانوية عامة قبل أي شيء
-        // ===============================
-
-        if (
-          studySystem === "ثانوية عامة"
-        ) {
-
-          msg(
-            "عفواً، هذا النظام غير متاح بمدرستك."
-          );
-
-          $("saveBtn").disabled =
-            true;
-
-          return;
-        }
-
-
-        const studentPhone =
-          normalizePhone(
-            $("studentPhone").value
-          );
-
-
-        const guardianName =
-          normalizeName(
-            $("guardianName").value
-          );
-
-
-        const guardianPhone =
-          normalizePhone(
-            $("guardianPhone").value
-          );
-
-
-        const address =
-          $("address")
-            .value
-            .trim();
-
-
         // ===============================
         // نظام الدراسة
         // ===============================
+
+        const studySystem =
+          $("studySystem")
+            .value
+            .trim();
+
 
         if (!studySystem) {
 
@@ -312,8 +300,64 @@ if (!storedStudent) {
         }
 
 
+        if (
+          studySystem === "ثانوية عامة"
+        ) {
+
+          studySystemMsg(
+            "عفواً، هذا النظام غير متاح بمدرستك.",
+            "error"
+          );
+
+          $("saveBtn").disabled =
+            true;
+
+          return;
+        }
+
+
         // ===============================
-        // التحقق من رقم الطالب
+        // الهاتف
+        // ===============================
+
+        const studentPhone =
+          normalizePhone(
+            $("studentPhone").value
+          );
+
+
+        // ===============================
+        // اسم ولي الأمر
+        // ===============================
+
+        const guardianName =
+          normalizeName(
+            $("guardianName").value
+          );
+
+
+        // ===============================
+        // هاتف ولي الأمر
+        // ===============================
+
+        const guardianPhone =
+          normalizePhone(
+            $("guardianPhone").value
+          );
+
+
+        // ===============================
+        // العنوان
+        // ===============================
+
+        const address =
+          $("address")
+            .value
+            .trim();
+
+
+        // ===============================
+        // التحقق من هاتف الطالب
         // ===============================
 
         if (
@@ -333,7 +377,7 @@ if (!storedStudent) {
 
 
         // ===============================
-        // اسم ولي الأمر
+        // التحقق من اسم ولي الأمر
         // ===============================
 
         if (
@@ -354,7 +398,7 @@ if (!storedStudent) {
 
 
         // ===============================
-        // هاتف ولي الأمر
+        // التحقق من هاتف ولي الأمر
         // ===============================
 
         if (
@@ -374,7 +418,7 @@ if (!storedStudent) {
 
 
         // ===============================
-        // العنوان
+        // التحقق من العنوان
         // ===============================
 
         if (
@@ -440,6 +484,10 @@ if (!storedStudent) {
           );
 
 
+          // ===============================
+          // خطأ Supabase
+          // ===============================
+
           if (error) {
 
             console.error(
@@ -456,7 +504,7 @@ if (!storedStudent) {
 
 
           // ===============================
-          // فحص نتيجة الدالة
+          // نتيجة الدالة
           // ===============================
 
           if (
