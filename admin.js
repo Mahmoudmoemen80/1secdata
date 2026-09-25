@@ -21,6 +21,20 @@ function escapeHtml(value) {
     .replace(/'/g, "&#39;");
 }
 
+function formatRegistrationDate(value) {
+  if (!value) return "—";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return "—";
+  return new Intl.DateTimeFormat("ar-EG", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
+  }).format(d);
+}
+
 async function load() {
   const { data, error } = await db.rpc("admin_student_list");
 
@@ -112,6 +126,7 @@ function render() {
     rows.map(row => {
 
       const index = allRows.indexOf(row);
+      const serial = rows.indexOf(row) + 1;
 
       const status =
         row.registered
@@ -148,7 +163,7 @@ function render() {
 
       return `
         <tr>
-          <td>${escapeHtml(row.student_number)}</td>
+          <td>${serial}</td>
           <td>${escapeHtml(row.name)}</td>
           <td>${escapeHtml(row.student_code)}</td>
           <td>${escapeHtml(row.study_system || "—")}</td>
@@ -159,6 +174,7 @@ function render() {
           <td>${escapeHtml(row.guardian_name || "—")}</td>
           <td>${escapeHtml(row.guardian_phone || "—")}</td>
           <td>${escapeHtml(row.address || "—")}</td>
+          <td>${escapeHtml(formatRegistrationDate(row.registered_at))}</td>
           <td>${status}</td>
           <td>${actions}</td>
         </tr>
@@ -221,6 +237,11 @@ function showDetails(row) {
     <div class="detail-row">
       <span>العنوان</span>
       <strong>${escapeHtml(row.address || "—")}</strong>
+    </div>
+
+    <div class="detail-row">
+      <span>تاريخ ووقت التسجيل</span>
+      <strong>${escapeHtml(formatRegistrationDate(row.registered_at))}</strong>
     </div>
   `;
 
@@ -521,7 +542,8 @@ $("exportBtn").addEventListener("click", () => {
   const rows = getFilteredRows();
 
   const headers = [
-    "رقم الطالب",
+    "م",
+    "رقم الطالب الأصلي",
     "الاسم",
     "الكود",
     "نظام الدراسة",
@@ -531,57 +553,54 @@ $("exportBtn").addEventListener("click", () => {
     "هاتف الطالب",
     "اسم ولي الأمر",
     "هاتف ولي الأمر",
-    "العنوان",
+    "العنوان بالتفصيل",
+    "تاريخ ووقت التسجيل",
     "الحالة"
   ];
 
-  const data = [
-    headers,
-    ...rows.map(row => [
-      row.student_number,
-      row.name,
-      row.student_code,
-      row.study_system || "",
-      row.class_name,
-      row.school_file_number,
-      row.national_id,
-      row.student_phone || "",
-      row.guardian_name || "",
-      row.guardian_phone || "",
-      row.address || "",
-      row.registered ? "مسجل" : "غير مسجل"
-    ])
+  const data = rows.map((row, i) => [
+    i + 1,
+    row.student_number ?? "",
+    row.name ?? "",
+    row.student_code ?? "",
+    row.study_system || "",
+    row.class_name ?? "",
+    row.school_file_number ?? "",
+    String(row.national_id ?? ""),
+    String(row.student_phone ?? ""),
+    row.guardian_name || "",
+    String(row.guardian_phone ?? ""),
+    row.address || "",
+    formatRegistrationDate(row.registered_at),
+    row.registered ? "مسجل" : "غير مسجل"
+  ]);
+
+  if (typeof XLSX === "undefined") {
+    alert("تعذر تشغيل تصدير Excel. أعد تحميل الصفحة ثم حاول مرة أخرى.");
+    return;
+  }
+
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
+  ws['!cols'] = [
+    { wch: 6 }, { wch: 16 }, { wch: 28 }, { wch: 18 },
+    { wch: 18 }, { wch: 14 }, { wch: 16 }, { wch: 18 },
+    { wch: 18 }, { wch: 24 }, { wch: 18 }, { wch: 35 },
+    { wch: 24 }, { wch: 14 }
   ];
+  ws['!autofilter'] = { ref: `A1:N${data.length + 1}` };
+  ws['!freeze'] = { xSplit: 0, ySplit: 1 };
 
-  const csv =
-    data.map(row =>
-      row.map(value =>
-        `"${String(value ?? "").replace(/"/g, '""')}"`
-      ).join(",")
-    ).join("\n");
+  // Keep phone/national IDs as text so leading zeroes are preserved.
+  for (let r = 2; r <= data.length + 1; r++) {
+    for (const col of ["H", "I", "K"]) {
+      const cell = ws[`${col}${r}`];
+      if (cell) cell.t = "s";
+    }
+  }
 
-  const blob =
-    new Blob(
-      ["\ufeff" + csv],
-      { type: "text/csv;charset=utf-8" }
-    );
-
-  const url =
-    URL.createObjectURL(blob);
-
-  const a =
-    document.createElement("a");
-
-  a.href = url;
-  a.download = "بيانات_الطلاب.csv";
-
-  document.body.appendChild(a);
-
-  a.click();
-
-  a.remove();
-
-  URL.revokeObjectURL(url);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "بيانات الطلاب");
+  XLSX.writeFile(wb, "بيانات_الطلاب.xlsx");
 });
 
 (async () => {
