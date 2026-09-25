@@ -1,155 +1,98 @@
-html
+```html
 <!doctype html>
 <html lang="ar" dir="rtl">
 
 <head>
-
   <meta charset="utf-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1"
-  >
+  <meta name="viewport" content="width=device-width,initial-scale=1">
 
   <title>استكمال بيانات الطالب</title>
 
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* رسالة نظام الدراسة */
     #studySystemMessage {
-      margin-top: 10px;
-      padding: 10px 14px;
+      display: none;
+      margin: 12px 0;
+      padding: 12px 15px;
       border-radius: 10px;
       font-weight: 700;
       text-align: center;
-      min-height: 0;
+      font-size: 16px;
     }
 
     #studySystemMessage.error {
+      display: block;
       color: #8f3838;
       background: #f9e7e4;
       border: 1px solid #efc9c4;
     }
 
     #studySystemMessage.success {
+      display: block;
       color: #286149;
       background: #e5f2eb;
       border: 1px solid #c8e2d3;
     }
   </style>
-
 </head>
 
 
 <body>
 
-
 <header class="hero">
-
   <div>
-
-    <h1>
-      استكمال بيانات الطالب
-    </h1>
-
-    <p>
-      الصف الأول الثانوي 2026-2027
-    </p>
-
+    <h1>استكمال بيانات الطالب</h1>
+    <p>الصف الأول الثانوي 2026-2027</p>
   </div>
-
 </header>
 
 
 <main class="container">
 
 
-  <!-- بيانات الطالب -->
-
   <section class="card">
 
-    <h2>
-      بيانات الطالب
-    </h2>
-
+    <h2>بيانات الطالب</h2>
 
     <div class="grid">
 
-
       <div>
-
-        <span>
-          الاسم
-        </span>
-
+        <span>الاسم</span>
         <strong id="sName"></strong>
-
       </div>
 
-
       <div>
-
-        <span>
-          كود الطالب
-        </span>
-
+        <span>كود الطالب</span>
         <strong id="sCode"></strong>
-
       </div>
 
-
       <div>
-
-        <span>
-          الفصل
-        </span>
-
+        <span>الفصل</span>
         <strong id="sClass"></strong>
-
       </div>
 
-
       <div>
-
-        <span>
-          رقم الملف بالمدرسة
-        </span>
-
+        <span>رقم الملف بالمدرسة</span>
         <strong id="sFile"></strong>
-
       </div>
-
 
       <div>
-
-        <span>
-          الرقم القومي
-        </span>
-
+        <span>الرقم القومي</span>
         <strong id="sNational"></strong>
-
       </div>
-
 
     </div>
 
   </section>
 
 
-  <!-- استكمال البيانات -->
-
   <section class="card">
 
-    <h2>
-      استكمال البيانات
-    </h2>
-
+    <h2>استكمال البيانات</h2>
 
     <form id="registerForm">
 
-
-      <!-- نظام الدراسة -->
 
       <label for="studySystem">
         نظام الدراسة
@@ -173,10 +116,9 @@ html
       </select>
 
 
+      <!-- الرسالة تظهر هنا فوراً -->
       <div id="studySystemMessage"></div>
 
-
-      <!-- هاتف الطالب -->
 
       <label for="studentPhone">
         رقم تليفون الطالب (واتساب)
@@ -193,8 +135,6 @@ html
       >
 
 
-      <!-- اسم ولي الأمر -->
-
       <label for="guardianName">
         اسم ولي الأمر
       </label>
@@ -208,8 +148,6 @@ html
         required
       >
 
-
-      <!-- هاتف ولي الأمر -->
 
       <label for="guardianPhone">
         رقم ولي الأمر (واتساب)
@@ -226,8 +164,6 @@ html
       >
 
 
-      <!-- العنوان -->
-
       <label for="address">
         العنوان بالتفصيل
       </label>
@@ -238,8 +174,6 @@ html
         required
       ></textarea>
 
-
-      <!-- زر التسجيل -->
 
       <button
         id="saveBtn"
@@ -252,11 +186,9 @@ html
 
       <div id="message"></div>
 
-
     </form>
 
   </section>
-
 
 </main>
 
@@ -268,5 +200,95 @@ html
 <script src="register.js"></script>
 
 
+<!-- ================================================= -->
+<!-- كود نظام الدراسة - يعمل مباشرة داخل الصفحة -->
+<!-- ================================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const studySystem =
+    document.getElementById("studySystem");
+
+  const studySystemMessage =
+    document.getElementById("studySystemMessage");
+
+  const saveBtn =
+    document.getElementById("saveBtn");
+
+
+  if (!studySystem) {
+    console.error("studySystem غير موجود");
+    return;
+  }
+
+
+  if (!studySystemMessage) {
+    console.error("studySystemMessage غير موجود");
+    return;
+  }
+
+
+  studySystem.addEventListener("change", function () {
+
+    const value =
+      studySystem.value;
+
+
+    console.log(
+      "تم تغيير نظام الدراسة إلى:",
+      value
+    );
+
+
+    /* ثانوية عامة */
+
+    if (value === "ثانوية عامة") {
+
+      studySystemMessage.textContent =
+        "عفواً، هذا النظام غير متاح بمدرستك.";
+
+      studySystemMessage.className =
+        "error";
+
+      saveBtn.disabled = true;
+
+      return;
+    }
+
+
+    /* بكالوريا */
+
+    if (value === "بكالوريا") {
+
+      studySystemMessage.textContent =
+        "تم اختيار نظام البكالوريا.";
+
+      studySystemMessage.className =
+        "success";
+
+      saveBtn.disabled = false;
+
+      return;
+    }
+
+
+    /* لم يتم الاختيار */
+
+    studySystemMessage.textContent = "";
+
+    studySystemMessage.className = "";
+
+    saveBtn.disabled = false;
+
+  });
+
+});
+
+</script>
+
+
 </body>
 </html>
+```
