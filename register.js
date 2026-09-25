@@ -59,6 +59,23 @@ function isValidEgyptianPhone(value) {
   );
 }
 
+// ===============================
+// الاسم - حروف فقط
+// ===============================
+
+function normalizeName(value) {
+  return String(value || '')
+    .replace(/[^A-Za-z؀-ۿ\s]/g, '')
+    .replace(/\s+/g, ' ')
+    .trimStart();
+}
+
+['guardianName'].forEach(id => {
+  $(id).addEventListener('input', e => {
+    e.target.value = normalizeName(e.target.value);
+  });
+});
+
 
 // ===============================
 // الحصول على بيانات الطالب
@@ -164,9 +181,7 @@ if (!storedStudent) {
 
 
         const guardianName =
-          $("guardianName")
-            .value
-            .trim();
+          normalizeName($("guardianName").value);
 
 
         const guardianPhone =
@@ -220,11 +235,12 @@ if (!storedStudent) {
         // ===============================
 
         if (
-          guardianName.length < 3
+          guardianName.length < 3 ||
+          !/^[A-Za-z؀-ۿ]+(?:\s+[A-Za-z؀-ۿ]+)*$/.test(guardianName)
         ) {
 
           msg(
-            "من فضلك اكتب اسم ولي الأمر بالكامل."
+            "اسم ولي الأمر يجب أن يحتوي على حروف فقط."
           );
 
           $("guardianName").focus();

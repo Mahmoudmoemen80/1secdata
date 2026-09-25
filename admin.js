@@ -238,6 +238,19 @@ function normalizePhone(value) {
   return normalizeDigits(value).replace(/\D/g, "").slice(0, 11);
 }
 
+function normalizeName(value) {
+  return String(value || "")
+    .replace(/[^A-Za-z؀-ۿ\s]/g, "")
+    .replace(/\s+/g, " ")
+    .trimStart();
+}
+
+["editName", "editGuardianName"].forEach(id => {
+  $(id).addEventListener("input", e => {
+    e.target.value = normalizeName(e.target.value);
+  });
+});
+
 function openEdit(row) {
   $("editId").value = row.id ?? "";
   $("editStudentNumber").value = row.student_number ?? "";
@@ -272,7 +285,7 @@ $("editForm").addEventListener("submit", async event => {
 
   const studentId = Number($("editId").value);
   const studentNumber = Number($("editStudentNumber").value);
-  const name = $("editName").value.trim();
+  const name = normalizeName($("editName").value);
   const nationalId = normalizeDigits($("editNationalId").value).replace(/\s+/g, "");
   const studentCode = $("editStudentCode").value.trim();
   const gender = $("editGender").value.trim();
@@ -280,13 +293,34 @@ $("editForm").addEventListener("submit", async event => {
   const className = $("editClassName").value.trim();
   const fileNumber = $("editFileNumber").value.trim();
   const studentPhone = normalizePhone($("editStudentPhone").value);
-  const guardianName = $("editGuardianName").value.trim();
+  const guardianName = normalizeName($("editGuardianName").value);
   const guardianPhone = normalizePhone($("editGuardianPhone").value);
   const address = $("editAddress").value.trim();
 
-  if (!studentId || !Number.isInteger(studentNumber) || !name || !/^[0-9]{14}$/.test(nationalId) || !studySystem) {
-    $("editMsg").textContent = "راجع البيانات المطلوبة، خاصة الرقم القومي ونظام الدراسة.";
+  if (!studentId || !Number.isInteger(studentNumber) || !name || !/^[A-Za-z؀-ۿ]+(?:\s+[A-Za-z؀-ۿ]+)*$/.test(name) || !/^[0-9]{14}$/.test(nationalId) || !studySystem) {
+    $("editMsg").textContent = "راجع البيانات المطلوبة، خاصة الاسم والرقم القومي ونظام الدراسة.";
     $("editMsg").className = "message error";
+    return;
+  }
+
+  if (studentPhone && !/^01[0125][0-9]{8}$/.test(studentPhone)) {
+    $("editMsg").textContent = "هاتف الطالب يجب أن يكون رقمًا مصريًا صحيحًا من 11 رقمًا.";
+    $("editMsg").className = "message error";
+    $("editStudentPhone").focus();
+    return;
+  }
+
+  if (guardianName && !/^[A-Za-z؀-ۿ]+(?:\s+[A-Za-z؀-ۿ]+)*$/.test(guardianName)) {
+    $("editMsg").textContent = "اسم ولي الأمر يجب أن يحتوي على حروف فقط.";
+    $("editMsg").className = "message error";
+    $("editGuardianName").focus();
+    return;
+  }
+
+  if (guardianPhone && !/^01[0125][0-9]{8}$/.test(guardianPhone)) {
+    $("editMsg").textContent = "هاتف ولي الأمر يجب أن يكون رقمًا مصريًا صحيحًا من 11 رقمًا.";
+    $("editMsg").className = "message error";
+    $("editGuardianPhone").focus();
     return;
   }
 

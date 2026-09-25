@@ -403,15 +403,15 @@
         </div>
         <div>
           <label for="editStudentPhone">هاتف الطالب</label>
-          <input id="editStudentPhone" type="tel" maxlength="11">
+          <input id="editStudentPhone" type="tel" inputmode="numeric" maxlength="11" pattern="01[0125][0-9]{8}" title="رقم هاتف مصري من 11 رقمًا">
         </div>
         <div>
           <label for="editGuardianName">اسم ولي الأمر</label>
-          <input id="editGuardianName" type="text">
+          <input id="editGuardianName" type="text" pattern="[A-Za-z؀-ۿ\s]+" title="اسم ولي الأمر حروف فقط">
         </div>
         <div>
           <label for="editGuardianPhone">هاتف ولي الأمر</label>
-          <input id="editGuardianPhone" type="tel" maxlength="11">
+          <input id="editGuardianPhone" type="tel" inputmode="numeric" maxlength="11" pattern="01[0125][0-9]{8}" title="رقم هاتف مصري من 11 رقمًا">
         </div>
       </div>
 
