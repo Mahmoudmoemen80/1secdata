@@ -333,7 +333,10 @@ if (!storedStudent) {
           normalizeName(
             $("guardianName").value
           );
-
+const studentName =
+  normalizeName(
+    currentStudent.name
+  );
 
         // ===============================
         // هاتف ولي الأمر
